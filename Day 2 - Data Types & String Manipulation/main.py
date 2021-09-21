@@ -23,8 +23,8 @@ price_per_person = initial_bill / number_to_split + total_tip_per_person
 # Show user the bill, the tip, the tip per person and the bill with tip totals
 
 data = f"The bill is: {initial_bill}\n" \
-       f"The tip is: {total_tip}\n" \
-       f"The tip per-person is: {total_tip_per_person}\n" \
+       f"The tip is: {round(total_tip, 2)}\n" \
+       f"The tip per-person is: {round(total_tip_per_person, 2)}\n" \
        f"The total bill including tip is: {total_bill}\n" \
-       f"The total price per person is: {price_per_person} (Bill:{initial_bill/number_to_split}  Tip:{total_tip_per_person}"
+       f"The total price per person is: {round(price_per_person, 2)} (Bill:{round(initial_bill/number_to_split, 2)} Tip:{round(total_tip_per_person, 2)}) "
 print(data)
