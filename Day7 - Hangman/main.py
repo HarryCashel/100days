@@ -35,7 +35,7 @@ print(answer)
 # Create a list of the chosen word
 
 # Option 1
-word = [i for i in answer]
+# word = [i for i in answer]
 # print(word)
 
 # Option 2
@@ -49,7 +49,7 @@ for i in word:
 # print(display)
 
 # Set lives for player and condition that the game is won to False
-lives = 3
+lives = 5
 game_not_won = True
 
 # Allow user to guess for letters - While lives > 0
