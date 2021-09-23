@@ -25,4 +25,4 @@ for i in total_height:
     total_sum += i
 
 average_height = total_sum/len(total_height)
-print(f"The average height is {average_height}m")
+print(f"The average height is {round(average_height, 2)}m")
