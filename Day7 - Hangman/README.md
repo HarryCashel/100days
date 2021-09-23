@@ -1,1 +1,1 @@
-![image](Hangman Flowchart.drawio.png)
+![image](Day7 - Hangman/docs/Hangman Flowchart.drawio.png)
