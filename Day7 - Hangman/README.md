@@ -1,1 +1,1 @@
-![image](Hangman Flowchart.drawio.png)
+![image](/docs/Hangman Flowchart.drawio.png)
