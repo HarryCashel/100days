@@ -109,9 +109,6 @@ def run():
             print(decode())
             if not run_again():
                 run_program = False
-        # else:
-
-
 
 
 run()
