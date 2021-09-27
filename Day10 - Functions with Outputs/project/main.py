@@ -1,5 +1,12 @@
 """Program to mimic functionality of simple calculator"""
 
+from art import logo
+import os
+
+
+def cls():
+    os.system('clear')
+
 
 def add(n1, n2):
     return n1 + n2
@@ -53,9 +60,10 @@ def calculate(n1, n2):
 
 def run():
     """To continually run function"""
+    print(logo)
     run_function = True
-    n1 = int(input("First digit: "))
-    n2 = int(input("Second digit: "))
+    n1 = float(input("First digit: "))
+    n2 = float(input("Second digit: "))
     answer = calculate(n1, n2)
     print(answer)
     while run_function:
@@ -64,16 +72,13 @@ def run():
             run_function = False
         restart = input("Do you want to restart or continue?('r' or 'c': ")
         if "r".lower() in restart:
+            cls()
             run()
         elif "c".lower() in restart:
-            n3 = int(input("Next digit: "))
+            cls()
+            n3 = float(input("Next digit: "))
             new_answer = calculate(answer, n3)
             print(new_answer)
-
-
-
-
-
 
 
 run()
