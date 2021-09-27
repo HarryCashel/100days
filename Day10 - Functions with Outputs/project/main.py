@@ -17,7 +17,7 @@ def divide(n1, n2):
     return n1 / n2
 
 
-def calculate():
+def calculate(n1, n2):
     """User input to determine with calculation function to run"""
 
     # dictionary to hold the operation sign as key and related function as value
@@ -28,10 +28,6 @@ def calculate():
         "/": divide,
 
     }
-
-    n1 = int(input("First digit: "))
-    n2 = int(input("Second digit: "))
-
     # My initial way of coding the logic to determine the operation
 
     # ask = input("Multiply/Divide/Add/Subtract?: ")
@@ -58,11 +54,26 @@ def calculate():
 def run():
     """To continually run function"""
     run_function = True
+    n1 = int(input("First digit: "))
+    n2 = int(input("Second digit: "))
+    answer = calculate(n1, n2)
+    print(answer)
     while run_function:
-        print(calculate())
         run_again = input("Do you want to run again?: y/n")
         if "n" in run_again:
             run_function = False
+        restart = input("Do you want to restart or continue?('r' or 'c': ")
+        if "r".lower() in restart:
+            run()
+        elif "c".lower() in restart:
+            n3 = int(input("Next digit: "))
+            new_answer = calculate(answer, n3)
+            print(new_answer)
+
+
+
+
+
 
 
 run()
