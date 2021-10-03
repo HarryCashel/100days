@@ -59,4 +59,22 @@ def has_resources(coffee_selection):
     return True
 
 
+def check_payment(coffee_selection, payment, ):
+    """Function to check payment given is equal to or higher than the cost of the select coffee"""
+    payment = payment
+    global bank
+    cost = money_cost[coffee_selection]
+
+    if cost > payment:
+        return f"A {coffee_selection} costs: ${cost}" \
+               f" Refunding ${payment}"
+    elif cost < payment:
+        bank += cost
+        return f"Making {coffee_selection}" \
+               f" Refunding ${payment - cost}"
+
+    elif money_cost[coffee_selection] == payment:
+        bank += payment
+        return f"Making {coffee_selection}"
+
 
