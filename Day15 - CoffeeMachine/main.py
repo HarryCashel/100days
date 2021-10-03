@@ -17,6 +17,17 @@ def check_resources():
             print(f"{k}: {v}g")
 
 
+def refill_resources():
+    """Function to refill the resources of the machine"""
+    for k, v in machine_resources.items():
+        if k == "milk" or k == "water":
+            amount = int(input(f"How much would you like to fill {k} (ml): "))
+        else:
+            amount = int(input(f"How much would you like to fill {k} (g): "))
+
+        machine_resources[k] += amount
+
+
 def process_payment() -> float:
     """Function to process users coin deposit\nReturns total dollar amount as float"""
     dic_payments = {"20c": .2, "50c": .5, "$1": 1, "$2": 2,}
@@ -43,4 +54,6 @@ def process_payment() -> float:
 #     elif v > machine_resources[k]:
 #         print(f"Not enough {k}")
 
-print(check_resources())
+
+refill_resources()
+check_resources()
