@@ -7,8 +7,18 @@ print("What coffee would you like? 'cappuccino/latte/espresso?")
 # coffee = input("Enter c/l/e or 1/2/3 or type the full name: ")
 
 
-# Function to process coins and notes
-def process_payment():
+def check_resources():
+    """Function to check and print current resources in the machine"""
+    print("Machine resources:")
+    for k, v in machine_resources.items():
+        if k == "milk" or k == "water":
+            print(f"{k}: {v}ml")
+        else:
+            print(f"{k}: {v}g")
+
+
+def process_payment() -> float:
+    """Function to process users coin deposit\nReturns total dollar amount as float"""
     dic_payments = {"20c": .2, "50c": .5, "$1": 1, "$2": 2,}
     total = 0
     # loop through list and take each denomination from user
@@ -33,4 +43,4 @@ def process_payment():
 #     elif v > machine_resources[k]:
 #         print(f"Not enough {k}")
 
-print(process_payment())
+print(check_resources())
