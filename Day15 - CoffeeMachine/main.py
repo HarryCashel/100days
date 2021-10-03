@@ -2,6 +2,7 @@
 
 from data import *
 from clear_screen import screen_clear as clear
+import time
 
 
 def check_resources():
@@ -68,7 +69,7 @@ def check_payment(coffee_selection, payment, ):
     elif cost < payment:
         bank += cost
         return True, f"Making {coffee_selection}" \
-                     f" Refunding ${payment - cost}"
+                     f" Refunding ${round(payment - cost, 1)}"
 
     elif money_cost[coffee_selection] == payment:
         bank += payment
@@ -96,6 +97,7 @@ def run():
     run_program = True
     while run_program:
         coffee = select_coffee()
+        clear()
 
         if coffee == "check":
             check_resources()
@@ -113,18 +115,24 @@ def run():
 
         if not sufficient_resources[0]:
             print(sufficient_resources[1])
-            run_program = False
+            time.sleep(1.5)
+            clear()
+            continue
+
         elif sufficient_resources[0]:
 
             payment = check_payment(coffee, process_payment())
 
             if not payment[0]:
                 print(payment[1])
-                continue
+                time.sleep(1.5)
+                clear()
 
-            if payment[0]:
+            elif payment[0]:
                 print(payment[1])
                 make_coffee(coffee)
+                time.sleep(1.5)
+                clear()
 
 
 run()
