@@ -36,19 +36,7 @@ def check_guess(c1, c2):
 
 # Select two random indices from our data list
 random_choices = random.sample(data, 2)
-
-# Set variables for each option
-choice_1 = random_choices[0]
 choice_2 = random_choices[1]
-
-print(f"""
-    {choice_1['name']} is a {choice_1['description']} from {choice_1['country']}
-    {vs}\n
-    {choice_2['name']} is a {choice_2['description']} from {choice_2['country']}""")
-
-if check_guess(choice_1, choice_2):
-    print("Correct")
-    score += 1
 
 # Set a boolean for our game loop
 game_loop = True
@@ -72,5 +60,6 @@ while game_loop:
     game_loop = check_guess(choice_1, choice_2)
     if game_loop:
         score += 1
+        print(f"Your score is {score}")
 
 print(f"GG. Your score was {score}")
