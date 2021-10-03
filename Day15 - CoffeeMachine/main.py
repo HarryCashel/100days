@@ -4,7 +4,7 @@ from data import *
 
 # Get user to select coffee
 print("What coffee would you like? 'cappuccino/latte/espresso?")
-# coffee = input("Enter c/l/e or 1/2/3 or type the full name: ")
+coffee = input("Enter c/l/e or 1/2/3 or type the full name: ")
 
 
 def check_resources():
@@ -47,13 +47,16 @@ def process_payment() -> float:
                 break
     return total
 
-# Function to check if machine has enough resources for selected coffee
-# for k, v in resource_costs['latte'].items():
-#     if v < machine_resources[k]:
-#         print(k)
-#     elif v > machine_resources[k]:
-#         print(f"Not enough {k}")
+
+def has_resources(coffee_selection):
+    """Function to check if enough resources available in machine to make select coffee"""
+
+    for k, v in resource_costs[coffee_selection].items():
+        if v > machine_resources[k]:
+            return False, f"Not enough {k}"
+        elif v < machine_resources[k]:
+            continue
+    return True
 
 
-refill_resources()
-check_resources()
+
