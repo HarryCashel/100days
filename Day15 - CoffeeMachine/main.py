@@ -48,13 +48,15 @@ def process_payment() -> float:
 
 def has_resources(coffee_selection):
     """Function to check if enough resources available in machine to make select coffee"""
-
-    for k, v in resource_costs[coffee_selection].items():
-        if v > machine_resources[k]:
-            return False, f"Not enough {k}"
-        elif v < machine_resources[k]:
-            continue
-    return True, None
+    try:
+        for k, v in resource_costs[coffee_selection].items():
+            if v > machine_resources[k]:
+                return False, f"Not enough {k}"
+            elif v < machine_resources[k]:
+                continue
+        return True, None
+    except KeyError:
+        return None
 
 
 def check_payment(coffee_selection, payment, ):
@@ -110,6 +112,11 @@ def run():
             continue
         elif coffee == "exit":
             run_program = False
+        elif coffee == "latte" or coffee == "cappuccino" or coffee == "espresso":
+            pass
+        else:
+            print("Please enter valid coffee or code.")
+            run()
 
         sufficient_resources = has_resources(coffee)
 
