@@ -1,10 +1,7 @@
 """A virtual coffee machine"""
 
 from data import *
-
-# Get user to select coffee
-print("What coffee would you like? 'cappuccino/latte/espresso?")
-coffee = input("Enter c/l/e or 1/2/3 or type the full name: ")
+from clear_screen import screen_clear as clear
 
 
 def check_resources():
@@ -30,7 +27,7 @@ def refill_resources():
 
 def process_payment() -> float:
     """Function to process users coin deposit\nReturns total dollar amount as float"""
-    dic_payments = {"20c": .2, "50c": .5, "$1": 1, "$2": 2,}
+    dic_payments = {"20c": .2, "50c": .5, "$1": 1, "$2": 2, }
     total = 0
     # loop through list and take each denomination from user
     for k, v in dic_payments.items():
@@ -56,7 +53,7 @@ def has_resources(coffee_selection):
             return False, f"Not enough {k}"
         elif v < machine_resources[k]:
             continue
-    return True
+    return True, None
 
 
 def check_payment(coffee_selection, payment, ):
@@ -66,15 +63,68 @@ def check_payment(coffee_selection, payment, ):
     cost = money_cost[coffee_selection]
 
     if cost > payment:
-        return f"A {coffee_selection} costs: ${cost}" \
-               f" Refunding ${payment}"
+        return False, f"A {coffee_selection} costs: ${cost}" \
+                      f" Refunding ${payment}"
     elif cost < payment:
         bank += cost
-        return f"Making {coffee_selection}" \
-               f" Refunding ${payment - cost}"
+        return True, f"Making {coffee_selection}" \
+                     f" Refunding ${payment - cost}"
 
     elif money_cost[coffee_selection] == payment:
         bank += payment
-        return f"Making {coffee_selection}"
+        return True, f"Making {coffee_selection}"
 
 
+def make_coffee(coffee_selection):
+    """Function to make coffee and deduct resources"""
+
+    for k, v in resource_costs[coffee_selection].items():
+        machine_resources[k] -= v
+
+
+def select_coffee():
+    """Function to select coffee or perform actions"""
+    print("Secret codes 'check', 'fill', 'bank', 'exit'")
+    print("What coffee would you like? 'cappuccino/latte/espresso?")
+    coffee = input("Enter c/l/e or 1/2/3 or type the full name: ")
+    return coffee
+
+
+def run():
+    """Function to run the coffee machine app"""
+
+    run_program = True
+    while run_program:
+        coffee = select_coffee()
+
+        if coffee == "check":
+            check_resources()
+            continue
+        elif coffee == "fill":
+            refill_resources()
+            continue
+        elif coffee == "bank":
+            print(bank)
+            continue
+        elif coffee == "exit":
+            run_program = False
+
+        sufficient_resources = has_resources(coffee)
+
+        if not sufficient_resources[0]:
+            print(sufficient_resources[1])
+            run_program = False
+        elif sufficient_resources[0]:
+
+            payment = check_payment(coffee, process_payment())
+
+            if not payment[0]:
+                print(payment[1])
+                continue
+
+            if payment[0]:
+                print(payment[1])
+                make_coffee(coffee)
+
+
+run()

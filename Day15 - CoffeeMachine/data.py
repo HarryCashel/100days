@@ -2,7 +2,7 @@
 machine_resources = {
     'water': 1000,
     'milk': 1000,
-    'coffee': 0,
+    'coffee': 250,
 }
 
 resource_costs = {
