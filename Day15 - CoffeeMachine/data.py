@@ -1,8 +1,8 @@
 
 machine_resources = {
-    'water': 1000,
+    'water': 0,
     'milk': 1000,
-    'coffee': 240,
+    'coffee': 0,
 }
 
 resource_costs = {
@@ -29,3 +29,5 @@ money_cost = {
     "cappuccino": 3.50,
 
 }
+
+bank = 0
