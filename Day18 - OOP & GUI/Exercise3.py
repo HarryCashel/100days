@@ -1,7 +1,9 @@
 from turtle import *
+import random
 
 tim = Turtle()
 tim.shape("turtle")
+turtle_colours = ["red", "green", "blue", "purple", "orange", "violet"]
 
 
 def draw_shape(sides):
@@ -13,4 +15,5 @@ def draw_shape(sides):
 
 
 for shapes in range(3,101):
+    tim.color(random.choice(turtle_colours))
     draw_shape(shapes)
