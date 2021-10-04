@@ -36,10 +36,6 @@ class CoffeeMachine:
         except AttributeError:
             pass
 
-
-cm = CoffeeMachine()
-menu = Menu()
-
-drink = menu.find_drink('latte')
-
-print(cm.make_coffee(drink))
+    def fill_machine(self):
+        for item in self.resources:
+            self.resources[item] += int(input(f"How much would you like to fill {item}"))
