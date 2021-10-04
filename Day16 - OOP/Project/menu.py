@@ -32,4 +32,4 @@ class Menu:
         for item in self.menu:
             if item.name == choice:
                 return item
-        print("Sorry that item is not available")
+

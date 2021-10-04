@@ -5,7 +5,7 @@ class CoffeeMachine:
     """Models the machine that makes the coffee"""
     def __init__(self):
         self.resources = {
-            'water': 500,
+            'water': 0,
             'milk': 500,
             'coffee': 240,
         }
@@ -21,11 +21,14 @@ class CoffeeMachine:
     def check_resources(self, choice):
         """Returns True when resources in machine are greater than
         required resources for drink. Returns False if resources are insufficient"""
-        for item in choice.ingredients:
-            if choice.ingredients[item] > self.resources[item]:
-                print(f"Sorry there is not enough {item}.")
-                return False
-            return True
+        try:
+            for item in choice.ingredients:
+                if choice.ingredients[item] > self.resources[item]:
+                    print(f"Sorry there is not enough {item}.")
+                    return False
+                return True
+        except AttributeError:
+            print("This item is not available")
 
     def make_coffee(self, choice):
         """Deducts required resources for particular drink from machine"""
@@ -38,4 +41,7 @@ class CoffeeMachine:
 
     def fill_machine(self):
         for item in self.resources:
-            self.resources[item] += int(input(f"How much would you like to fill {item}"))
+            try:
+                self.resources[item] += int(input(f"How much would you like to fill {item}? "))
+            except ValueError:
+                print("Please enter integer")

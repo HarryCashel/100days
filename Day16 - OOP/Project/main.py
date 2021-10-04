@@ -12,6 +12,13 @@ while is_on:
     options = menu.get_items()
     print("Secret menu: 'close', 'check', 'fill'")
     drink = input(f"What would you like to order? {options}\n")
+    if drink == "1":
+        drink = "latte"
+    elif drink == "2":
+        drink = "cappuccino"
+    elif drink == "3":
+        drink = "espresso"
+
 
     if drink == "close":
         is_on = False
@@ -23,7 +30,8 @@ while is_on:
     else:
         drink = menu.find_drink(drink)
         can_make = coffee_machine.check_resources(drink)
-        is_payment = payment.make_payment(drink.cost)
+        if can_make:
+            is_payment = payment.make_payment(drink.cost)
 
         if can_make and is_payment:
             coffee_machine.make_coffee(drink)
