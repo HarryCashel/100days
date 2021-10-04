@@ -32,10 +32,4 @@ class Menu:
         for item in self.menu:
             if item.name == choice:
                 return item
-            print("Sorry that item is not available")
-
-
-menu = Menu()
-
-print(menu.get_items())
-print(menu.find_drink('latte'))
+        print("Sorry that item is not available")
