@@ -19,7 +19,6 @@ while is_on:
     elif drink == "3":
         drink = "espresso"
 
-
     if drink == "close":
         is_on = False
     elif drink == "check":
