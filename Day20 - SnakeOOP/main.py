@@ -1,25 +1,20 @@
-from turtle import *
+import time
+from snake import Snake
+from turtle import Screen
 
-
-class Snake:
-    """Models our snake"""
-
-    def __init__(self):
-        self.food = 0
-        self.body = []
-        self.starting_pos = [(0, 0), (20, 0), (40, 0)]
-        self.create_body()
-
-    def create_body(self):
-        """Creates the initial snake body"""
-
-        for i in range(3):
-            piece = Turtle()
-            piece.penup()
-            piece.shape("square")
-            piece.goto(self.starting_pos[i - 1])
-            self.body.append(piece)
+screen = Screen()
+screen.setup(800, 800)
+screen.bgcolor("black")
+screen.title("Snake")
 
 snake = Snake()
+
+screen.listen()
+
+while True:
+    screen.update()
+    time.sleep(.01)
+    snake.move_body()
+    screen.onkeypress(snake.move_left, "Left")
 
 exitonclick()
