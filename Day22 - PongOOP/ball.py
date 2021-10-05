@@ -1,6 +1,6 @@
 from turtle import *
 import random
-POSSIBLE_HEADINGS = [(0, 35), (145, 235), (325, 360)]
+POSSIBLE_HEADINGS = [(0, 45), (145, 235), (300, 360)]
 
 
 class Ball(Turtle):
@@ -22,4 +22,4 @@ class Ball(Turtle):
 
     def move_forward(self):
         """Moves the ball"""
-        self.forward(10)
+        self.forward(20)

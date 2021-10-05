@@ -13,7 +13,7 @@ screen.tracer(0)
 p1 = Player1()
 p2 = Player2()
 ball = Ball()
-ball.speed(6)
+ball.speed("fastest")
 
 
 screen.listen()
@@ -26,18 +26,17 @@ game_on = True
 
 while game_on:
     screen.update()
-    time.sleep(.2)
+    time.sleep(.1)
     ball.move_forward()
 
     # Check for wall collision
-    if abs(ball.ycor()) > 50:
+    if abs(ball.ycor()) > 350:
         new_heading = 360 - ball.heading()
         ball.setheading(new_heading)
 
-
     # Check for score
-    # if ball.xcor() > 20:
-    #     ball.refresh()
+    if abs(ball.xcor()) > 390:
+        ball.refresh()
 
 
 screen.exitonclick()
