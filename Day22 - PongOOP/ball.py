@@ -11,20 +11,15 @@ class Ball(Turtle):
         self.shape('circle')
         self.penup()
         self.color("green")
-        self.speed(5)
         self.refresh()
 
     def refresh(self):
         """Refreshing ball heading and x/y cords"""
         choice = random.choice(POSSIBLE_HEADINGS)
         random_int = random.randint(choice[0], choice[1])
+        self.goto(0, 0)
         self.setheading(random_int)
 
-    def detect_wall(self):
-        pass
-
-    def detect_paddle(self):
-        pass
-
-    def detect_score(self):
-        pass
+    def move_forward(self):
+        """Moves the ball"""
+        self.forward(10)
