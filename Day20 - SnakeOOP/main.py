@@ -15,6 +15,9 @@ while True:
     screen.update()
     time.sleep(.01)
     snake.move_body()
-    screen.onkeypress(snake.move_left, "Left")
+    screen.onkeypress(snake.up, "Up")
+    screen.onkeypress(snake.down, "Down")
+    screen.onkeypress(snake.left, "Left")
+    screen.onkeypress(snake.right, "Right")
 
 exitonclick()

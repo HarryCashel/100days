@@ -2,6 +2,11 @@ from turtle import *
 
 MOVE_SPEED = 20
 STARTING_POS = [(0, 0), (20, 0), (40, 0)]
+UP = 90
+DOWN = 270
+LEFT = 180
+RIGHT = 0
+
 
 class Snake:
     """Models our snake"""
@@ -33,5 +38,18 @@ class Snake:
                 ix.goto(new_x, new_y)
         self.head.forward(MOVE_SPEED)
 
-    def move_left(self):
-        self.head.left(90)
+    def up(self):
+        if self.head.heading() != DOWN:
+            self.head.setheading(UP)
+
+    def down(self):
+        if self.head.heading() != UP:
+            self.head.setheading(DOWN)
+
+    def left(self):
+        if self.head.heading() != RIGHT:
+            self.head.setheading(LEFT)
+
+    def right(self):
+        if self.head.heading() != LEFT:
+            self.head.setheading(RIGHT)
