@@ -14,28 +14,34 @@ class Snake:
     def __init__(self):
         self.food = 0
         self.body = []
-        self.create_body()
-        self.head = self.body[-1]
+        self.create_snake()
+        self.head = self.body[0]
 
-    def create_body(self):
+    def create_snake(self):
+        for cord in STARTING_POS:
+            self.create_piece(cord)
+
+    def create_piece(self, piece_pos):
         """Creates the initial snake body"""
+        piece = Turtle()
+        piece.penup()
+        piece.shape("square")
+        piece.color("white")
+        # piece.shapesize(1)
+        piece.goto(piece_pos)
+        self.body.append(piece)
 
-        for i in STARTING_POS:
-            piece = Turtle()
-            piece.penup()
-            piece.shape("square")
-            piece.color("white")
-            piece.shapesize(1)
-            piece.goto(i)
-            self.body.append(piece)
+    def add_piece(self):
+        """Adds a segment to the end of the snake"""
+        last_piece_pos = self.body[-1].position()
+        self.create_piece(last_piece_pos)
 
     def move_body(self):
         """Moves the snake body"""
-        for i, ix in enumerate(self.body):
-            if ix != self.head:
-                new_x = self.body[i + 1].xcor()
-                new_y = self.body[i + 1].ycor()
-                ix.goto(new_x, new_y)
+        for seg_num in range(len(self.body) - 1, 0, -1):
+            new_x = self.body[seg_num - 1].xcor()
+            new_y = self.body[seg_num - 1].ycor()
+            self.body[seg_num].goto(new_x, new_y)
         self.head.forward(MOVE_SPEED)
 
     def up(self):
