@@ -14,14 +14,15 @@ snake = Snake()
 food = Food()
 scoreboard = Scoreboard()
 
-screen.listen()
-screen.onkeypress(snake.up, "Up")
-screen.onkey(snake.down, "Down")
-screen.onkey(snake.left, "Left")
-screen.onkey(snake.right, "Right")
 
 game_is_on = True
 while game_is_on:
+    screen.listen()
+    screen.onkeypress(snake.up, "Up")
+    screen.onkey(snake.down, "Down")
+    screen.onkey(snake.left, "Left")
+    screen.onkey(snake.right, "Right")
+
     screen.update()
     time.sleep(0.1)
     snake.move()
@@ -36,9 +37,11 @@ while game_is_on:
     if snake.head.xcor() > 280 or snake.head.xcor() < -280 or snake.head.ycor() > 280 or snake.head.ycor() < -280:
         snake.reset()
         scoreboard.reset_self()
+
         again = screen.textinput(title="Play", prompt="Do you want to play again? ")
         if again == "no":
             screen.bye()
+
 
     #Detect collision with tail.
     for segment in snake.segments:
