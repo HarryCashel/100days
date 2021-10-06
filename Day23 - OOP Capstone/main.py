@@ -10,6 +10,7 @@ def level_up():
     if player.ycor() > 340:
         scoreboard.level_up()
         player.refresh()
+        car.level_up()
 
 
 DIFFICULTY = {'easy': 18, 'medium': 9, 'hard': 6, 'insane': 3}
@@ -43,11 +44,6 @@ while test:
     car.move()
     time.sleep(.1)
     screen.update()
-    level_up()
-    for _ in car.all_cars:
-        if _.distance(player) < 20:
-            test = False
-
     roll = random.randint(1, difficulty)
     if roll < 2:
         car.spawn_car()

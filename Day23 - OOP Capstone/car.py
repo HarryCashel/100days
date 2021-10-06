@@ -3,6 +3,7 @@ import random
 
 POSSIBLE_START = range(-250, 275, 25)
 COLOURS = ["red", "green", "white", "violet"]
+STARTING_SPEED = 5
 
 
 class Car:
@@ -10,6 +11,7 @@ class Car:
 
     def __init__(self):
         self.all_cars = []
+        self.speed = STARTING_SPEED
 
     def spawn_car(self):
         """Spawns a car"""
@@ -25,7 +27,7 @@ class Car:
     def move(self):
         """Moves the car"""
         for x in self.all_cars:
-            x.forward(10)
+            x.forward(STARTING_SPEED)
 
     def limit_cars(self):
         """Check for cars too close and remove them from all_cars list"""
@@ -33,7 +35,7 @@ class Car:
             try:
                 if self.all_cars[x].distance(self.all_cars[x + 1]) < 30:
                     self.all_cars.remove(x)
-                    self.all_cars.remove(x+1)
+                    self.all_cars.remove(x + 1)
             except ValueError:
                 pass
             except IndexError:
@@ -44,6 +46,5 @@ class Car:
             if x.xcor() < -350:
                 x.goto(x=350, y=random.choice(POSSIBLE_START))
 
-
-
-
+    def level_up(self):
+        self.speed += 50
