@@ -8,12 +8,13 @@ class Player(Turtle):
     def __init__(self, colour):
         super().__init__()
         self.penup()
+        self.shape("turtle")
         self.color(colour)
         self.refresh()
 
     def refresh(self):
         """Refresh player position"""
-        self.goto(x=0, y=-340)
+        self.goto(x=0, y=-320)
         self.setheading(90)
 
     def move_up(self):
