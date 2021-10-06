@@ -23,8 +23,12 @@ class Player(Turtle):
 
     def move_left(self):
         """Moves player west"""
-        self.left(SPEED)
+        if self.xcor() > -350:
+            current_x = self.xcor()
+            self.goto(current_x - 10, y=self.ycor())
 
     def move_right(self):
         """Moves player east"""
-        self.right(SPEED)
+        if self.xcor() < 350:
+            current_x = self.xcor()
+            self.goto(current_x + 10, y=self.ycor())
