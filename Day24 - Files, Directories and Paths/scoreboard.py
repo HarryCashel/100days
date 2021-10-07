@@ -3,7 +3,7 @@ from turtle import Turtle
 ALIGNMENT = "center"
 FONT = ("Courier", 24, "normal")
 
-with open("data.txt") as file:
+with open("../../../Desktop/data.txt") as file:
     content = file.read()
     content = int(content)
 
@@ -23,7 +23,7 @@ class Scoreboard(Turtle):
     def update_scoreboard(self):
         self.clear()
         self.write(f"Score: {self.score} High Score: {self.high_score}", align=ALIGNMENT, font=FONT)
-        with open("data.txt", mode="w") as new_file:
+        with open("/Users/cashe/Desktop/data.txt", mode="w") as new_file:
             new_file.write(str(self.high_score))
 
     def reset_self(self):
