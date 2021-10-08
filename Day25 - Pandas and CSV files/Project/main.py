@@ -24,7 +24,7 @@ screen.title("USA States")
 screen.addshape("blank_states_img.gif")
 turtle.shape("blank_states_img.gif")
 
-screen.bgpic(picname="blank_states_img.gif")
+# screen.bgpic(picname="blank_states_img.gif")
 
 
 # function to find x, y cords on the turtle screen
