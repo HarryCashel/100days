@@ -38,7 +38,7 @@ while len(guessed_states) < len(list(state_data.state)):
 
 # States in guessed and not in all_states list
 # Create a list of missed states and convert to csv
-states_to_learn = [i for i in all_states if i not in guessed_states]
+states_to_learn = [state for state in all_states if state not in guessed_states]
 states_to_learn = pandas.DataFrame(states_to_learn)
 
 states_to_learn.to_csv("statestolearn.csv")
