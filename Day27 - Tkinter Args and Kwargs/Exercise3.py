@@ -91,13 +91,18 @@ radio_button_2.pack()
 # List box
 def listbox_used(event):
     # Gets current selection from listbox
-    print(listbox.get(listbox.curselection()))
+    # print(listbox.get(listbox.curselection()))
+    if listbox.get(listbox.curselection()) == "Apple":
+        print("Works")
+    elif listbox.get(listbox.curselection()) == "Banana":
+        print("success")
 
 
 listbox = Listbox(height=4)
 fruits = ["Apple", "Orange", "Banana", "Strawberry"]
-for item in fruits:
-    listbox.insert(fruits.index(item), item)
+fruitss = {"Apple": "A", "Orange": "O", "Banana": "B", "Strawberry": "S"}
+for item in fruitss.keys():
+    listbox.insert(END, item)
 listbox.bind("<<ListboxSelect>>", listbox_used)
 listbox.pack()
 
