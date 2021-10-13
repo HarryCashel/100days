@@ -31,9 +31,9 @@ print("Welcome to the PyPassword Generator!\n")
 
 # My preferred generator
 
-length_of_password = int(input("How long should the password be? "))
+# length_of_password = int(input("How long should the password be? "))
 password = letters + numbers + symbols
-password = random.choices(password, k=length_of_password)
+password = random.choices(password, k=10)
 random.shuffle(password)
 new_password = "".join(password)
 print(new_password)
