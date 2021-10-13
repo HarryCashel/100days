@@ -37,10 +37,8 @@ def save_password():
     password = password_entry.get()
     email = username_entry.get()
 
-    empty_pop = messagebox.showinfo("Error", "Please fill out all fields.")
-
-    if len(email) or len(password) or len(website) < 1:
-        empty_pop
+    if len(email) < 1 or len(password) < 1 or len(website) < 1:
+        messagebox.showinfo("Error", "Please fill out all fields.")
     else:
         save_bool = messagebox.askyesno(title=website, message=f"Save these details?\nEmail: {email}")
 
@@ -52,7 +50,7 @@ def save_password():
                 if not check("data.txt", formatted_str):
                     file.write(formatted_str)
 
-            messagebox.showinfo("Saved", "Your password has been saved")
+            messagebox.showinfo("Success", f"Saved {website} credentials.")
         website_entry.delete(0, tk.END)
         # username_entry.delete(0, tk.END)
         password_entry.delete(0, tk.END)

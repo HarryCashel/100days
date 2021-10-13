@@ -37,10 +37,8 @@ def save_password():
     password = password_entry.get()
     email = username_entry.get()
 
-    empty_pop = messagebox.showinfo("Error", "Please fill out all fields.")
-
     if len(email) or len(password) or len(website) < 1:
-        empty_pop
+        messagebox.showinfo("Error", "Please fill out all fields.")
     else:
         save_bool = messagebox.askyesno(title=website, message=f"Save these details?\nEmail: {email}")
 
