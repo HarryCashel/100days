@@ -8,12 +8,31 @@ nato = pandas.read_csv("nato_phonetic_alphabet.csv")
 
 nato_dict = {row.letter: row.code for index, row in nato.iterrows()}
 
-print(nato_dict)
 
-word = input("Give me a word: ")
+# def run_again():
+#     again = input("Would you like to run again? (y/n)")
+#     if again == "y":
+#         return True
+#     return False
 
-# for letter in word.upper():
-#     print(nato_dict[letter])
 
-word_list = [nato_dict[letter] for letter in word.upper()]
-print(word_list)
+def word_to_nato():
+    word = input("Give me a word: ")
+
+    try:
+        word_list = [nato_dict[letter] for letter in word.upper()]
+    except KeyError:
+        print("Sorry, only letters in the alphabet are accepted.")
+        word_to_nato()
+    else:
+        print(word_list)
+        again = input("Would you like to run again? (y/n)")
+
+        if again == "y":
+            word_to_nato()
+        else:
+            print("Bye")
+
+
+
+word_to_nato()
