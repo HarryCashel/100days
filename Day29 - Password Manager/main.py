@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -34,18 +35,28 @@ def save_password():
     password = password_entry.get()
     email = username_entry.get()
 
-    formatted_str = f"{website} | {email} | {password}\n"
+    empty_pop = messagebox.showinfo("Error", "Please fill out all fields.")
 
-    with open("data.txt", mode="a") as file:
-        if not check("data.txt", formatted_str):
-            file.write(formatted_str)
+    if len(email) or len(password) or len(website) < 1:
+        empty_pop
+    else:
+        save_bool = messagebox.askyesno(title=website, message=f"Save these details?\nEmail: {email}")
 
-    website_entry.delete(0, tk.END)
-    # username_entry.delete(0, tk.END)
-    password_entry.delete(0, tk.END)
+        if save_bool:
+
+            formatted_str = f"{website} | {email} | {password}\n"
+
+            with open("data.txt", mode="a") as file:
+                if not check("data.txt", formatted_str):
+                    file.write(formatted_str)
+
+            messagebox.showinfo("Saved", "Your password has been saved")
+        website_entry.delete(0, tk.END)
+        # username_entry.delete(0, tk.END)
+        password_entry.delete(0, tk.END)
 
 
-def clear():
+def check_password():
     pass
 
 
