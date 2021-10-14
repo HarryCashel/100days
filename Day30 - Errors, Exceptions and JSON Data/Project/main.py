@@ -1,7 +1,25 @@
+import json
 import tkinter as tk
 from tkinter import messagebox
+from tkinter import simpledialog
 import pyperclip
-import json
+
+
+class CustomDialog(simpledialog.Dialog):
+
+    def __init__(self, parent, title=None, text=None):
+        super().__init__(parent, title)
+        self.data = text
+        simpledialog.Dialog.__init__(self, parent, title=title)
+
+    def body(self, parent):
+
+        self.text = tk.Text(self, width=40, height=4)
+        self.text.pack(fill="both", expand=True)
+
+        self.text.insert("1.0", self.data)
+
+        return self.text
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -90,8 +108,22 @@ def save_password():
             password_entry.delete(0, tk.END)
 
 
-def check_password():
-    pass
+def search_cred():
+    website = website_entry.get()
+    # try:
+    with open("data.json", "r") as file:
+        data = json.load(file)
+        in_dict = website in data
+        if in_dict:
+            email = data[website]["email"]
+            password = data[website]["password"]
+            pyperclip.copy(password)
+            messagebox.showinfo(website, f"Email: {email}\nPassword: {password}\nPassword copied to clipboard")
+
+        else:
+            messagebox.showinfo(website, f"There is no credentials stored for {website}")
+        website_entry.delete(0, tk.END)
+        password_entry.delete(0, tk.END)
 
 
 # ---------------------------- UI SETUP ------------------------------- #
@@ -118,7 +150,7 @@ password_label.grid(column=0, row=3)
 
 # Entries
 website_entry = tk.Entry(width=35)
-website_entry.grid(column=1, row=1, columnspan=2, sticky="EW", )
+website_entry.grid(column=1, row=1, columnspan=1, sticky="EW", )
 
 website_entry.focus()
 
@@ -137,4 +169,6 @@ generate_pw_button.grid(column=2, row=3, sticky="EW")
 add_credentials_button = tk.Button(text="Add", width=36, command=save_password)
 add_credentials_button.grid(column=1, row=4, columnspan=2, sticky="EW")
 
+search_button = tk.Button(text="Search", command=search_cred)
+search_button.grid(column=2, row=1, sticky="EW")
 window.mainloop()
