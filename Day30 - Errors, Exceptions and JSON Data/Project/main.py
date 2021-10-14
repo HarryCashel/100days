@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import pyperclip
+import json
 
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
@@ -23,37 +24,70 @@ def password_generator():
 
 # ---------------------------- SAVE PASSWORD ------------------------------- #
 def save_password():
-    def check(check_file, string):
-        with open(check_file) as f:
-            datafile = f.readlines()
-        found = False  # This isn't really necessary
-        for line in datafile:
-            if string in line:
-                # found = True # Not necessary
-                return True
-        return False  # Because you finished the search without finding
+    def check(check_file, key):
+        try:
+            with open(check_file, "r") as file:
+                data = json.load(file)
+                in_dict = key in data
+                return in_dict
+        except FileNotFoundError:
+            with open(check_file, "w") as file:
+                json.dump(new_data, file, indent=4)
 
     website = website_entry.get()
     password = password_entry.get()
     email = username_entry.get()
+    new_data = {
+        website: {
+            "email": email,
+            "password": password,
+        }
+    }
 
     if len(email) < 1 or len(password) < 1 or len(website) < 1:
         messagebox.showinfo("Error", "Please fill out all fields.")
     else:
-        save_bool = messagebox.askyesno(title=website, message=f"Save these details?\nEmail: {email}")
 
-        if save_bool:
+        try:
+            if check("data.json", website):
+                save_bool = messagebox.askyesno(title=website, message=f"Overwrite Password?\nEmail: {email}")
 
-            formatted_str = f"{website} | {email} | {password}\n"
+                if save_bool:
+                    with open("data.json", "r") as file:
+                        data = json.load(file)
+                        data.update(new_data)
+                    with open("data.json", mode="w") as file:
+                        json.dump(data, file, indent=4)
+                    messagebox.showinfo("Success", f"Saved {website} credentials.")
+                else:
+                    pass
 
-            with open("data.txt", mode="a") as file:
-                if not check("data.txt", formatted_str):
-                    file.write(formatted_str)
-
-            messagebox.showinfo("Success", f"Saved {website} credentials.")
-        website_entry.delete(0, tk.END)
-        # username_entry.delete(0, tk.END)
-        password_entry.delete(0, tk.END)
+            else:
+                try:
+                    with open("data.json", "r") as file:
+                        data = json.load(file)
+                        data.update(new_data)
+                    with open("data.json", mode="w") as file:
+                        json.dump(data, file, indent=4)
+                        messagebox.showinfo("Success", f"Saved {website} credentials.")
+                except IOError:
+                    with open("data.json", "w") as file:
+                        json.dump(new_data, file, indent=4)
+        except json.decoder.JSONDecodeError:
+            # print("Key not inside")
+            try:
+                with open("data.json", "r") as file:
+                    data = json.load(file)
+                    data.update(new_data)
+                with open("data.json", mode="w") as file:
+                    json.dump(data, file, indent=4)
+            except IOError:
+                with open("data.json", "w") as file:
+                    json.dump(new_data, file, indent=4)
+        finally:
+            website_entry.delete(0, tk.END)
+            # username_entry.delete(0, tk.END)
+            password_entry.delete(0, tk.END)
 
 
 def check_password():
