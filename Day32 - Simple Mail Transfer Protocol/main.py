@@ -13,7 +13,7 @@ day = now.weekday()
 # conditional to send email
 while True:
     if day == 6:
-        with open("quotes.txt", "r") as file:
+        with open("Project/quotes.txt", "r") as file:
             import random
 
             data = file.readlines()
