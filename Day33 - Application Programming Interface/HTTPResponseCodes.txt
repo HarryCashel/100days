@@ -1,0 +1,48 @@
+
+100-199
+Informational responses
+
+100 Continue - continue request or ignore the response if request is already finished
+101 Switching Protocol - response to an Upgrade request header
+
+
+
+200-299
+Successful responses
+
+200 OK - Result meaning of "success" depends on the HTTP method
+        GET/HEAD/PUT OR POST/TRACE
+201 Created - request succeeded, and a new resource created as result
+        Typical response to a Post or Put request
+
+
+
+300-399
+Redirection responses
+
+301 Moved Permanently - The URL has been changed permanently. New url given as response
+207 Temporary Redirect
+308 Permanent Redirect
+
+
+
+400-499
+Client error responses
+
+400 Bad Request - Invalid syntax
+401 Unauthorised - client must authorise itself to get requested response
+402 Payment Required - Reserved for future use, currently little no no use
+403 Forbidden - Client does not have access rights to the content
+404 Not Found - Server cannot find the requested resource
+408 - Timeout
+
+
+
+500-599
+Server error responses
+
+500 Internal Server Error - The server encountered an error it does not know how to handle
+501 Not Implemented - Request method is not supported by the server and cannot be handled
+503 Service Unavailable - Maintenance or server overloaded
+504 Gateway Timeout - Cannot get a response in time
+
