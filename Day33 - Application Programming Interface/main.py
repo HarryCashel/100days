@@ -82,7 +82,29 @@ def is_dark():
     return False
 
 
+def email_self(rec_email):
+    """Sends an email that the ISS is viewable from current location"""
+    with smtplib.SMTP("smtp.gmail.com") as connection:
+        connection.starttls()
+        connection.login(user=EMAIL, password=PASSWORD)
 
+        connection.sendmail(
+            from_addr=EMAIL,
+            to_addrs=rec_email,
+            msg=f"Subject:ISS VIEWABLE\n\nThe International Space Station is viewable now!"
+        )
+
+
+def check():
+    """Checks conditionals and runs code if everything is True. Returns True if conditions met and email sent. False
+    otherwise"""
+    iss_distance = tuple_diff(get_current_iss_pos(), (MY_LAT, MY_LNG))
+    # Is it dark outside AND is the ISS close to my position?
+    if viewable_difference(iss_distance) and is_dark():
+        # then send me an email
+        email_self("cashel.harry101@gmail.com")
+        return True
+    return False
 
 
 print(check())
