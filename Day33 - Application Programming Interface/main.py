@@ -43,6 +43,45 @@ def viewable_difference(tup):
     return False
 
 
+def datetime_from_utc_to_local(utc_datetime):
+    """Takes a utc datetime and returns local time"""
+    now_time = t.time()
+    offset = datetime.fromtimestamp(now_time) - datetime.utcfromtimestamp(now_time)
+    return utc_datetime + offset
+
+
+def get_local_sun():
+    """Gets the local sunrise and sunset times"""
+    url = "https://api.sunrise-sunset.org/json"
+
+    parameters = {
+        "lat": MY_LAT,
+        "lng": MY_LNG,
+        "formatted": 0
+    }
+    response = requests.get(url=url, params=parameters, verify=False)
+    response.raise_for_status()
+
+    data = response.json()
+
+    utc_sunset = isoparse(data["results"]["sunset"])
+    utc_sunrise = isoparse(data["results"]["sunrise"])
+
+    datetime_sunset = datetime_from_utc_to_local(utc_sunset)
+    datetime_sunrise = datetime_from_utc_to_local(utc_sunrise)
+    return datetime_sunrise, datetime_sunset
+
+
+def is_dark():
+    """Check if it is before sunrise or after sunset in current timezone"""
+    time_now = datetime.now()
+    local_sunrise = get_local_sun()[0]
+    local_sunset = get_local_sun()[1]
+    if time_now.hour >= local_sunset.hour or time_now.hour <= local_sunrise.hour:
+        return True
+    return False
+
+
 
 
 
