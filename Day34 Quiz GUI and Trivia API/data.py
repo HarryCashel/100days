@@ -1,4 +1,5 @@
 import requests
+import html
 
 URL = "https://opentdb.com/api.php?"
 
@@ -12,5 +13,5 @@ response.raise_for_status()
 
 data = response.json()["results"]
 
-answer = data[0]["question"]
+answer = html.unescape(data[0]["question"])
 print(answer)
