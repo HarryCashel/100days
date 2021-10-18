@@ -38,7 +38,7 @@ def tuple_diff(iss_pos_tuple, my_pos_tuple):
 
 def viewable_difference(tup):
     """Returns True if the difference is under 5. False otherwise"""
-    if tup[0] > 4 and tup[1] > 4:
+    if tup[0] < 5 and tup[1] < 1:
         return True
     return False
 
@@ -105,6 +105,5 @@ def check():
         email_self("cashel.harry101@gmail.com")
         return True
     return False
-
 
 print(check())
