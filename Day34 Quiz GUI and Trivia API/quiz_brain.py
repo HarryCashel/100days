@@ -1,5 +1,6 @@
 import html
 
+
 class QuizBrain:
     """Models the quiz and logic"""
 
@@ -13,12 +14,19 @@ class QuizBrain:
     def next_question(self):
         """Moves the quiz to the next question"""
         self.current_question = self.question_list[self.question_number]
-        question_text = html.unescape(self.current_question)
+        question_text = html.unescape(self.current_question.question)
         self.question_number += 1
+        return question_text
 
-    def check_answer(self):
+    def check_answer(self, user_answer):
         """Checks user guess against question answer"""
-        pass
+        if user_answer == self.current_question.answer:
+            self.score += 1
+            return True
+        else:
+            return False
 
     def have_questions(self):
-        return self.question_number < len(self.question_list)
+        if self.question_number < len(self.question_list):
+            return True
+        return False
