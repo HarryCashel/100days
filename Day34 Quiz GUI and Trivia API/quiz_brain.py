@@ -16,7 +16,7 @@ class QuizBrain:
         self.current_question = self.question_list[self.question_number]
         question_text = html.unescape(self.current_question.question)
         self.question_number += 1
-        return question_text
+        return f"Q.{self.question_number}:{question_text}"
 
     def check_answer(self, user_answer):
         """Checks user guess against question answer"""
