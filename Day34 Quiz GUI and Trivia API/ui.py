@@ -23,7 +23,8 @@ class QuizInterface:
         self.window.config(bg=THEME_COLOUR, padx=20, pady=20)
 
         self.canvas = tk.Canvas(width=300, height=250)
-        self.question_text = self.canvas.create_text(150, 125, text="Place holder", font=FONT, fill=THEME_COLOUR)
+        self.question_text = self.canvas.create_text(150, 125, text="Place holder", font=FONT, fill=THEME_COLOUR,
+                                                     width=250)
         self.canvas.grid(column=0, row=1, columnspan=2, pady=30)
 
         self.score_label = tk.Label(text=f"Score: 0", bg=THEME_COLOUR, fg="white")
@@ -37,7 +38,10 @@ class QuizInterface:
         self.guess_false = tk.Button(image=false_img, command=guess_false())
         self.guess_false.grid(column=1, row=2)
 
+        self.get_question()
+
         self.window.mainloop()
 
     def get_question(self):
-        return self.current_quiz.next_question()
+        q_text = self.current_quiz.next_question()
+        self.canvas.itemconfig(self.question_text, text=q_text)
