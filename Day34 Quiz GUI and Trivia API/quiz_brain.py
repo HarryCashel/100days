@@ -13,17 +13,22 @@ class QuizBrain:
 
     def next_question(self):
         """Moves the quiz to the next question"""
-        self.current_question = self.question_list[self.question_number]
-        question_text = html.unescape(self.current_question.question)
-        self.question_number += 1
-        return f"Q.{self.question_number}:{question_text}"
+        if self.have_questions():
+            self.current_question = self.question_list[self.question_number]
+            question_text = html.unescape(self.current_question.question)
+            self.question_number += 1
+            return f"Q.{self.question_number}:{question_text}"
+        else:
+            pass
 
     def check_answer(self, user_answer):
         """Checks user guess against question answer"""
         if user_answer == self.current_question.answer:
             self.score += 1
+            print("correct")
             return True
         else:
+            print("wrong")
             return False
 
     def have_questions(self):

@@ -8,7 +8,3 @@ question_bank = [Question(question["question"], question["correct_answer"]) for 
 quiz = QuizBrain(question_bank)
 interface = QuizInterface(quiz)
 
-if quiz.have_questions():
-    pass
-print(quiz.next_question())
-print(quiz.check_answer("True"))
