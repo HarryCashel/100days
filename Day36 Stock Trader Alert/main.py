@@ -2,10 +2,13 @@ import requests
 import os
 import datetime
 
-STOCK = ["TSLA", "IBM"]
+STOCK = ["TSLA", "GOOG", "AAPL"]
 COMPANY_NAME = "Tesla Inc"
 ALPHA_URL = "https://www.alphavantage.co/query"
 NEWS_URL = "https://newsapi.org/v2/everything"
+TWILIO_SID = os.environ["TWILIO_ACC_SID"]
+TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+
 today = datetime.date.today()
 yesterday = today - datetime.timedelta(days=1)
 
@@ -68,17 +71,35 @@ relevant_stock_news = get_recent_articles(get_articles(stock_data))
 
 
 def format_news():
+    data = []
     for item in stock_data:
         change = float(stock_data[item]["change percent"].replace("%", ""))
-        if change > .1:
+        if abs(change) > .1:
+
             for index, news in enumerate(relevant_stock_news[item].keys()):
-                format_title = f"{item}: 🔺{change}%"
+                if change > .1:
+                    icon = "🔺"
+                elif change < .1:
+                    icon = "🔻"
+                format_title = f"{item}: {icon}{change}%"
                 format_headline = f"Headline: {news}"
                 format_brief = f"Brief: {relevant_stock_news[item][news]}"
-                print(format_title, format_headline, )
-                print(format_brief)
+                data.append(
+                    {
+                        "title": format_title,
+                        "headline": format_headline,
+                        "brief": format_brief
+                    }
+                )
+    return data
 
 
+if format_news()[:3]:
+    print(format_news()[:3])
+if format_news()[3:6]:
+    print(format_news()[3:6])
+if format_news()[6:]:
+    print(format_news()[6:])
 # STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 
