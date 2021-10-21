@@ -38,7 +38,7 @@ def get_relevant_info(info: dict):
     ticker_names = [key for key in info]
     ticker_names = dict.fromkeys(ticker_names)
 
-    for index, key in enumerate(info):
+    for key in info:
         price = info[key]["05. price"]
         previous_close = info[key]["08. previous close"]
         change_percent = info[key]["10. change percent"]
