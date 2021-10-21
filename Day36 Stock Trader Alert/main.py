@@ -25,17 +25,14 @@ def get_stock_data():
     return data
 
 
-stock_data = get_stock_data()
-
-
-def get_relevant_info():
-    ticker_names = [key for key in stock_data]
+def get_relevant_info(info: dict):
+    ticker_names = [key for key in info]
     ticker_names = dict.fromkeys(ticker_names)
 
-    for index, key in enumerate(stock_data):
-        price = stock_data[key]["05. price"]
-        previous_close = stock_data[key]["08. previous close"]
-        change_percent = stock_data[key]["10. change percent"]
+    for index, key in enumerate(info):
+        price = info[key]["05. price"]
+        previous_close = info[key]["08. previous close"]
+        change_percent = info[key]["10. change percent"]
         ticker_names[key] = {
             "price": price,
             "previous_close": previous_close,
@@ -66,11 +63,21 @@ def get_recent_articles(info: dict):
     return data
 
 
-print(get_relevant_info())
-print(get_articles(get_relevant_info()))
-print(get_recent_articles(get_articles(get_relevant_info())))
+stock_data = (get_relevant_info(get_stock_data()))
+relevant_stock_news = get_recent_articles(get_articles(stock_data))
 
-dic = {"TSLA": None, "IBM": None}
+
+def format_news():
+    for item in stock_data:
+        change = float(stock_data[item]["change percent"].replace("%", ""))
+        if change > .1:
+            for index, news in enumerate(relevant_stock_news[item].keys()):
+                format_title = f"{item}: 🔺{change}%"
+                format_headline = f"Headline: {news}"
+                format_brief = f"Brief: {relevant_stock_news[item][news]}"
+                print(format_title, format_headline, )
+                print(format_brief)
+
 
 # STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
@@ -79,7 +86,7 @@ dic = {"TSLA": None, "IBM": None}
 # Instead of printing ("Get News"), actually get the first 3 news pieces for the COMPANY_NAME. 
 
 # STEP 3: Use https://www.twilio.com
-# Send a seperate message with the percentage change and each article's title and description to your phone number. 
+# Send a separate message with the percentage change and each article's title and description to your phone number.
 
 
 # Optional: Format the SMS message like this:
