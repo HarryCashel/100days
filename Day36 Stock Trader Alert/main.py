@@ -42,8 +42,8 @@ def get_relevant_info():
             "change percent": change_percent
         }
     return ticker_names
-#
-#
+
+
 def get_articles(info: dict):
     data = {}
     for ticker in info:
@@ -57,14 +57,18 @@ def get_articles(info: dict):
     return data
 
 
-# def get_recent_articles(info: dict):
-#     data = {}
-#     for ticker in info:
-#
+def get_recent_articles(info: dict):
+    data = {}
+    for ticker in info:
+        most_recent_title = [i["title"] for i in info[ticker]["articles"][:3]]
+        most_recent_description = [i["description"] for i in info[ticker]["articles"][:3]]
+        data[ticker] = {most_recent_title[i]: most_recent_description[i] for i in range(len(most_recent_title))}
+    return data
 
 
 print(get_relevant_info())
 print(get_articles(get_relevant_info()))
+print(get_recent_articles(get_articles(get_relevant_info())))
 
 dic = {"TSLA": None, "IBM": None}
 
