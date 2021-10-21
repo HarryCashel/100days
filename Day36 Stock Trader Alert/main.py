@@ -44,17 +44,17 @@ def get_relevant_info():
     return ticker_names
 #
 #
-# def get_articles(info: dict):
-#     data = {}
-#     for ticker in info:
-#         response = requests.get(NEWS_URL, params={
-#             "apiKey": os.environ["NEWS_API_KEY"],
-#             "q": ticker,
-#             "from_param": yesterday,
-#             "to": today
-#         })
-#         data[ticker] = response.json()
-#     return data
+def get_articles(info: dict):
+    data = {}
+    for ticker in info:
+        response = requests.get(NEWS_URL, params={
+            "apiKey": os.environ["NEWS_API_KEY"],
+            "q": ticker,
+            "from_param": yesterday,
+            "to": today
+        })
+        data[ticker] = response.json()
+    return data
 
 
 # def get_recent_articles(info: dict):
