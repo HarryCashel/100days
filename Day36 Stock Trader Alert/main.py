@@ -1,3 +1,5 @@
+"""REVIEW - MAKE EACH API SECTION A CLASS IN SEPARATE MODULES"""
+
 import requests
 import os
 import datetime
@@ -61,7 +63,7 @@ def get_articles(info: dict):
     return data
 
 
-def get_recent_articles(info: dict):
+def get_recent_articles(info: dict) -> dict:
     data = {}
     for ticker in info:
         most_recent_title = [i["title"] for i in info[ticker]["articles"][:3]]
