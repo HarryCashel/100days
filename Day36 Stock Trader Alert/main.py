@@ -1,13 +1,17 @@
 import requests
 import os
 import datetime
+from twilio.rest import Client
 
+# Constants and env variables
 STOCK = ["TSLA", "GOOG", "AAPL"]
-COMPANY_NAME = "Tesla Inc"
 ALPHA_URL = "https://www.alphavantage.co/query"
 NEWS_URL = "https://newsapi.org/v2/everything"
+
+TWILIO_PH_NUM = "+18575778643"
 TWILIO_SID = os.environ["TWILIO_ACC_SID"]
 TWILIO_AUTH_TOKEN = os.environ["TWILIO_AUTH_TOKEN"]
+MY_NUM = os.environ["MY_NUM"]
 
 today = datetime.date.today()
 yesterday = today - datetime.timedelta(days=1)
@@ -72,34 +76,41 @@ relevant_stock_news = get_recent_articles(get_articles(stock_data))
 
 def format_news():
     data = []
+
     for item in stock_data:
         change = float(stock_data[item]["change percent"].replace("%", ""))
         if abs(change) > .1:
 
-            for index, news in enumerate(relevant_stock_news[item].keys()):
+            for news in relevant_stock_news[item]:
                 if change > .1:
                     icon = "🔺"
                 elif change < .1:
                     icon = "🔻"
-                format_title = f"{item}: {icon}{change}%"
-                format_headline = f"Headline: {news}"
-                format_brief = f"Brief: {relevant_stock_news[item][news]}"
                 data.append(
-                    {
-                        "title": format_title,
-                        "headline": format_headline,
-                        "brief": format_brief
-                    }
+                    f"\n{item}: {icon}{change}% "
+                    f"\nHeadline: {news} "
+                    f"\nBrief: {relevant_stock_news[item][news]} "
                 )
     return data
 
 
-if format_news()[:3]:
-    print(format_news()[:3])
-if format_news()[3:6]:
-    print(format_news()[3:6])
-if format_news()[6:]:
-    print(format_news()[6:])
+def send_message(data: list):
+    for i in range(len(data)):
+        message = data[i]
+        client = Client(TWILIO_SID, TWILIO_AUTH_TOKEN)
+        message = client.messages \
+            .create(
+                body=message,
+                from_=TWILIO_PH_NUM,
+                to=MY_NUM
+            )
+    print(message.status)
+
+
+send_message(format_news())
+
+# for i in range(len(format_news())):
+#     print(format_news()[i])
 # STEP 1: Use https://www.alphavantage.co
 # When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
 
