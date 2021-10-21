@@ -28,20 +28,20 @@ def get_stock_data():
 stock_data = get_stock_data()
 
 
-# def get_relevant_info():
-#     ticker_names = [key for key in stock_data]
-#     ticker_names = dict.fromkeys(ticker_names)
-#
-#     for index, key in enumerate(stock_data):
-#         price = stock_data[key]["05. price"]
-#         previous_close = stock_data[key]["08. previous close"]
-#         change_percent = stock_data[key]["10. change percent"]
-#         ticker_names[key] = {
-#             "price": price,
-#             "previous_close": previous_close,
-#             "change percent": change_percent
-#         }
-#     return ticker_names
+def get_relevant_info():
+    ticker_names = [key for key in stock_data]
+    ticker_names = dict.fromkeys(ticker_names)
+
+    for index, key in enumerate(stock_data):
+        price = stock_data[key]["05. price"]
+        previous_close = stock_data[key]["08. previous close"]
+        change_percent = stock_data[key]["10. change percent"]
+        ticker_names[key] = {
+            "price": price,
+            "previous_close": previous_close,
+            "change percent": change_percent
+        }
+    return ticker_names
 #
 #
 # def get_articles(info: dict):
