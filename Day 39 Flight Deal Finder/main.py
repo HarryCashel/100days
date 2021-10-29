@@ -21,7 +21,7 @@ sheet_data.inbound_data = inbound_flights
 print(inbound_flights)
 #
 
-sheet_data.update_data("outboundPrice", outbound_flights, "outboundRoute")
-sheet_data.update_data("inboundPrice", inbound_flights, "inboundRoute")
-
-
+sheet_data.update_data("outboundPrice", outbound_flights, "outboundRoute", sheet_data.outbound_data)
+sheet_data.update_data("inboundPrice", inbound_flights, "inboundRoute", sheet_data.inbound_data)
+sheet_data.is_lower()
+print(sheet_data.message)
