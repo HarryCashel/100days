@@ -73,11 +73,3 @@ class FlightSearch:
         datetime_time = parser.isoparse(iso_time)
         format_time = datetime.strftime(datetime_time, "%d/%m/%Y %H:%M%p")
         return format_time
-
-
-# test = FlightSearch()
-# # test.outbound_flights()
-# # print(test.outbound_list)
-# test.inbound_flights()
-# print(test.inbound_list)
-#
