@@ -17,10 +17,26 @@ class FlightSearch:
         self.KIWI_URL = "https://tequila-api.kiwi.com/v2/search"
         self._from = "SYD"
         # may have to turn into dict - cityname: IATAcode
-        self.destinations_list = ["PAR", "BER", "TYO"]
-        self.price_list = {}
+        self.destinations_list = {}
+        self.outbound_list = {}
+        self.inbound_list = {}
 
-    def search_flights(self):
+    def api_call(self, dest, head, param, direction):
+        response = requests.get(self.KIWI_URL, headers=head, params=param)
+        response.raise_for_status()
+
+        if response.json()["data"]:
+            data = response.json()["data"][0]
+            direction[dest] = {
+                "price": data["price"],
+                "fly_from": data["cityFrom"],
+                "fly_to": data["cityTo"],
+                "fly_from_code": data["cityCodeFrom"],
+                "fly_to_code": data["cityCodeTo"],
+                "route": {x["cityCodeTo"]: self.format_time(x["local_departure"]) for x in data['route']}
+            }
+
+    def outbound_flights(self):
         for destination in self.destinations_list:
             header = {"apikey": self.KIWI_API}
             flight_data = {
@@ -31,19 +47,20 @@ class FlightSearch:
                 "one_for_city": 1,
                 "curr": "AUD"
             }
-            response = requests.get(self.KIWI_URL, headers=header, params=flight_data)
-            response.raise_for_status()
-            data = response.json()["data"][0]
-            self.price_list[destination] = {
-                "price": data["price"],
-                "fly_from": data["cityFrom"],
-                "fly_to": data["cityTo"],
-                "fly_from_code": data["cityCodeFrom"],
-                "fly_to_code": data["cityCodeTo"],
-                "route": {x["cityCodeTo"]: self.format_time(x["local_departure"]) for x in data['route']}
-            }
+            self.api_call(destination, header, flight_data, self.outbound_list)
 
-            print(data)
+    def inbound_flights(self):
+        for destination in self.destinations_list:
+            header = {"apikey": self.KIWI_API}
+            flight_data = {
+                "fly_from": destination,
+                "fly_to": self._from,
+                "date_from": today,
+                "date_to": six_months,
+                "one_for_city": 1,
+                "curr": "AUD"
+            }
+            self.api_call(destination, header, flight_data, self.inbound_list)
 
     # noinspection PyMethodMayBeStatic
     def organise(self, data: dict):
@@ -58,7 +75,9 @@ class FlightSearch:
         return format_time
 
 
-test = FlightSearch()
-(test.search_flights())
-print(test.price_list)
-
+# test = FlightSearch()
+# # test.outbound_flights()
+# # print(test.outbound_list)
+# test.inbound_flights()
+# print(test.inbound_list)
+#
