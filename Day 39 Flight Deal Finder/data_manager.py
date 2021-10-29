@@ -59,5 +59,4 @@ class DataManager:
                         "inbound": city["inboundRoute"]
                     }
 
-# test = DataManager()
-# test.is_lower()
+
