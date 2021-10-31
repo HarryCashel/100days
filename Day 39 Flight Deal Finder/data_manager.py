@@ -9,8 +9,7 @@ class DataManager:
     # This class is responsible for talking to the Google Sheet.
     def __init__(self):
         self.url = GOOGLE_API
-        self._id = 2
-        self.destination_data = None
+        self.destination_data = {city["iataCode"]: city["id"] for city in self.get_data()["prices"]}
         self.outbound_data = {}
         self.inbound_data = {}
         self.message = {}
@@ -23,20 +22,18 @@ class DataManager:
         self.destination_data = response.json()["prices"]
         return response.json()
 
-    def update_data(self, direction_price, direction_dict: dict, route, direction):
+    def update_data(self, direction_price, direction_dict: dict, route):
         for dest in direction_dict:
             params = {
                 "price": {
                     direction_price: direction_dict[dest]["price"],
-                    route: self.format_dict(dest, direction)
+                    route: self.format_dict(dest, direction_dict)
 
                 }
             }
-            response = requests.put(f"{GOOGLE_API}/{self._id}",
+            response = requests.put(f"{GOOGLE_API}/{self.destination_data[dest]}",
                                     json=params)
             response.raise_for_status()
-            self._id += 1
-        self._id = 2
 
     def format_dict(self, destination, direction):
         route = direction[destination]["route"]
@@ -49,7 +46,7 @@ class DataManager:
             if city["inboundPrice"] and city["outboundPrice"]:
                 # print("yes")
                 my_price = city["myLowestPrice"]
-                total = city["outboundPrice"] + city["inboundPrice"]
+                total = float(city["outboundPrice"]) + float(city["inboundPrice"])
                 if total < my_price:
                     self.message[city["city"]] = {
                         "city": city["city"],
@@ -60,3 +57,8 @@ class DataManager:
                     }
 
 
+# test = DataManager()
+# print(test.get_data())
+# print(test.destination_data)
+# test.update_data()
+# # test.is_lower()
