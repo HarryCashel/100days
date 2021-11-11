@@ -9,16 +9,13 @@ soup = BeautifulSoup(yc_web_page, "html.parser")
 
 all_story_links = soup.find_all(name="a", class_="titlelink")
 
-# for link in all_story_links:
-#     print(link.get("href"))
-
 article_links = [link.get("href") for link in all_story_links]
 article_texts = [link.getText() for link in all_story_links]
 article_upvotes = [int(score.getText().split()[0]) for score in soup.find_all(name="span", class_="score")]
 
-print(article_texts)
-print(article_links)
-print(article_upvotes)
+
+while len(article_upvotes) < 30:
+    article_upvotes.append(0)
 
 highest = 0
 for num in article_upvotes:
