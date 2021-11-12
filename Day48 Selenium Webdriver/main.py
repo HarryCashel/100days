@@ -13,6 +13,5 @@ driver.get(
 price = driver.find_element(By.XPATH, '//*[@id="corePrice_desktop"]/div/table/tbody/tr/td[2]/span[1]/span[1]')
 # price = driver.find_element(By.CSS_SELECTOR, "span.a-offscreen+span")
 print(price.get_attribute("innerText"))
-print(price)
 
 driver.close()
