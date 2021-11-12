@@ -10,4 +10,10 @@ browser_headings = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/95.0.4638.69 Safari/537.36"
 }
 
-response = requests.get(url=ITEM_URL, headers=browser_headings)
+response = requests.get(url=ITEM_URL, headers=browser_headings).text
+
+soup = BeautifulSoup(response, "lxml")
+price_all = soup.find(name="span", class_="a-offscreen")
+
+
+print(price_all.getText())
