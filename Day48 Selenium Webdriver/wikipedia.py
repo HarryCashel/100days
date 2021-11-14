@@ -8,7 +8,8 @@ driver = webdriver.Chrome(service=service)
 driver.get("https://www.wikipedia.org/")
 
 english_articles = driver.find_element(By.ID, "js-link-box-en")
+num_of_articles = english_articles.find_element(By.TAG_NAME, "small bdi")
 
-print(english_articles.text)
+english_articles.click()
 
-driver.close()
+# driver.close()
