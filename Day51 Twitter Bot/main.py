@@ -20,8 +20,8 @@ class InternetSpeedTwitter:
     def __init__(self):
         self.service = Service("C:/Users/cashe/Desktop/chromedriver")
         self.driver = webdriver.Chrome(service=self.service)
-        self.down = 275
-        self.up = 20
+        self.down = 300
+        self.up = 40
         self.current_down = None
         self.current_up = None
 
@@ -93,7 +93,7 @@ class InternetSpeedTwitter:
                                                '1]/div/div[2]/div/div/section/div/div/div[3]/div/div/div/div[2]/div['
                                                '1]/div[1]/a/div/div[1]/div[1]/span/span')
 
-            if first_result.text == "Telstra":
+            if first_result.text == SERVICE_PROVIDER:
                 first_result.click()
 
             start_tweet = self.wait_for_field('//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div['
@@ -111,6 +111,7 @@ class InternetSpeedTwitter:
             send_tweet = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
                                              '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
                                              '3]/div/div/div[2]/div[4]/div/span/span')
+            send_tweet.click()
 
         else:
             print("Current speeds are good.")
