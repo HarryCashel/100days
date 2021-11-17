@@ -22,7 +22,7 @@ class InstagramBot:
     def __init__(self):
         self.service = Service(CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=self.service)
-        self.accounts_to_follow = "fraserwilsonfit"
+        self.accounts_to_follow = "therock"
 
     def sign_in(self):
         """Method to open and sign into Instagram"""
@@ -52,7 +52,9 @@ class InstagramBot:
         first_result_link.click()
 
     def get_to_followers(self):
-        pass
+        link_to_followers_xpath = '//*[@id="react-root"]/section/main/div/header/section/ul/li[2]/a'
+        link_to_followers = self.wait_for_field(link_to_followers_xpath)
+        link_to_followers.click()
 
     def spam_follow(self):
         pass
@@ -67,3 +69,4 @@ class InstagramBot:
 instabot = InstagramBot()
 instabot.sign_in()
 instabot.search()
+instabot.get_to_followers()
