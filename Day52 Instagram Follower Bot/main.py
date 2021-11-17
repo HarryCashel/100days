@@ -22,13 +22,21 @@ class InstagramBot:
     def __init__(self):
         self.service = Service(CHROME_DRIVER_PATH)
         self.driver = webdriver.Chrome(service=self.service)
-        self.accounts_to_follow = "fraserwilson"
+        self.accounts_to_follow = "fraserwilsonfit"
 
     def sign_in(self):
         """Method to open and sign into Instagram"""
         self.driver.get("https://www.instagram.com/")
         self.driver.fullscreen_window()
 
+    def search(self):
+        pass
 
-# instabot = InstagramBot()
-# instabot.sign_in()
+    def get_to_followers(self):
+        pass
+
+    def spam_follow(self):
+        pass
+
+instabot = InstagramBot()
+instabot.sign_in()
