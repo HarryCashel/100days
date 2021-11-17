@@ -30,7 +30,11 @@ class InstagramBot:
         self.driver.fullscreen_window()
 
     def search(self):
-        pass
+        search_bar_xpath = '//*[@id="react-root"]/section/nav/div[2]/div/div/div[2]/input'
+        search_bar = self.wait_for_field(xpath=search_bar_xpath)
+        search_bar.send_keys(self.accounts_to_follow)
+        search_bar.send_keys(Keys.RETURN)
+
 
     def get_to_followers(self):
         pass
@@ -38,5 +42,12 @@ class InstagramBot:
     def spam_follow(self):
         pass
 
+    def wait_for_field(self, xpath):
+        WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
+
+        field = self.driver.find_element(By.XPATH, xpath)
+        return field
+
 instabot = InstagramBot()
 instabot.sign_in()
+instabot.search()
