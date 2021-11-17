@@ -3,7 +3,6 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
@@ -47,13 +46,6 @@ class InternetSpeedTwitter:
         except NoSuchElementException:
             print("Couldn't fetch download or upload speed\n")
 
-    # Old method used before WebDriverWait
-    # def wait_for_element(self, classname):
-    #     content = self.driver.find_elements(By.CLASS_NAME, classname)
-    #     while content[0].text and content[1].text == "" or content[0].text and content[1].text == " ":
-    #         content = self.driver.find_elements(By.CLASS_NAME, classname)
-    #     return content
-
     def tweet(self):
         message = f"Hey {SERVICE_PROVIDER}, why is my internet speed {self.current_down}download/{self.current_up}upload when I pay for 175down/25up? "
         if float(self.current_up) < self.up or float(self.current_down) < self.down:
@@ -62,111 +54,66 @@ class InternetSpeedTwitter:
             self.driver.fullscreen_window()
 
             WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH,
-                                                   '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                   '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div[2]/div/input')))
+                                                                                  '//*[@id="layers"]/div['
+                                                                                  '2]/div/div/div/div/div/div[2]/div[ '
+                                                                                  '2]/div/div/div[2]/div[2]/div['
+                                                                                  '1]/div/div[2]/label/div/div['
+                                                                                  '2]/div/input')))
 
             email_field = self.driver.find_element(By.XPATH,
                                                    '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                   '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div[2]/div/input')
+                                                   '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div['
+                                                   '2]/div/input')
             email_field.send_keys(EMAIL)
             email_field.send_keys(Keys.RETURN)
 
             security_check = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                      '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div['
-                                                      '2]/div/input')
+                                                 '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div['
+                                                 '2]/div/input')
 
-            # WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH,
-            #                                           '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                           '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div['
-            #                                           '2]/div/input')))
-            #
-            # security_check = self.driver.find_element(By.XPATH,
-            #                                           '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                           '2]/div/div/div[2]/div[2]/div[1]/div/div[2]/label/div/div['
-            #                                           '2]/div/input')
             security_check.send_keys(USER)
             security_check.send_keys(Keys.RETURN)
 
             password_field = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                      '2]/div/div/div[2]/div[2]/div[1]/div/div[3]/div/label/div/div['
-                                                      '2]/div/input')
-            # WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH,
-            #                                           '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                           '2]/div/div/div[2]/div[2]/div[1]/div/div[3]/div/label/div/div['
-            #                                           '2]/div/input')))
-            #
-            # password_field = self.driver.find_element(By.XPATH,
-            #                                           '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                           '2]/div/div/div[2]/div[2]/div[1]/div/div[3]/div/label/div/div['
-            #                                           '2]/div/input')
+                                                 '2]/div/div/div[2]/div[2]/div[1]/div/div[3]/div/label/div/div['
+                                                 '2]/div/input')
+
             password_field.send_keys(PASSWORD)
             password_field.send_keys(Keys.RETURN)
 
             search_field = self.wait_for_field('//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div['
-                                                    '2]/div/div[2]/div/div/div/div[1]/div/div/div/form/div['
-                                                    '1]/div/div/label/div[2]/div/input')
+                                               '2]/div/div[2]/div/div/div/div[1]/div/div/div/form/div['
+                                               '1]/div/div/label/div[2]/div/input')
 
-            # search_field = self.driver.find_element(By.XPATH,
-            #                                         '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div['
-            #                                         '2]/div/div[2]/div/div/div/div[1]/div/div/div/form/div['
-            #                                         '1]/div/div/label/div[2]/div/input')
             search_field.send_keys(SERVICE_PROVIDER)
             search_field.send_keys(Keys.RETURN)
             time.sleep(2)
 
             first_result = self.wait_for_field('//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div['
-                                                    '1]/div/div[2]/div/div/section/div/div/div[3]/div/div/div/div[2]/div['
-                                                    '1]/div[1]/a/div/div[1]/div[1]/span/span')
-
-            # first_result = self.driver.find_element(By.XPATH,
-            #                                         '//*[@id="react-root"]/div/div/div[2]/main/div/div/div/div['
-            #                                         '1]/div/div[2]/div/div/section/div/div/div[3]/div/div/div/div[2]/div['
-            #                                         '1]/div[1]/a/div/div[1]/div[1]/span/span')
+                                               '1]/div/div[2]/div/div/section/div/div/div[3]/div/div/div/div[2]/div['
+                                               '1]/div[1]/a/div/div[1]/div[1]/span/span')
 
             if first_result.text == "Telstra":
                 first_result.click()
 
             start_tweet = self.wait_for_field('//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div['
-                                                   '3]/a/div/span/div/div/span/span')
+                                              '3]/a/div/span/div/div/span/span')
 
-            # start_tweet = self.driver.find_element(By.XPATH,
-            #                                        '//*[@id="react-root"]/div/div/div[2]/header/div/div/div/div[1]/div['
-            #                                        '3]/a/div/span/div/div/span/span')
             start_tweet.click()
-            # time.sleep(3)
-            write_tweet = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                   '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
-                                                   '1]/div/div/div/div/div/div/div/div/div/label/div['
-                                                   '1]/div/div/div/div/div/div/div/div/div/span[2]/span')
 
-            # write_tweet = self.driver.find_element(By.XPATH,
-            #                                        '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                        '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
-            #                                        '1]/div/div/div/div/div/div/div/div/div/label/div['
-            #                                        '1]/div/div/div/div/div/div/div/div/div/span[2]/span')
+            write_tweet = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
+                                              '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
+                                              '1]/div/div/div/div/div/div/div/div/div/label/div['
+                                              '1]/div/div/div/div/div/div/div/div/div/span[2]/span')
+
             write_tweet.send_keys(message)
 
             send_tweet = self.wait_for_field('//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-                                                  '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
-                                                  '3]/div/div/div[2]/div[4]/div/span/span')
-            # send_tweet = self.driver.find_element(By.XPATH,
-            #                                       '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-            #                                       '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
-            #                                       '3]/div/div/div[2]/div[4]/div/span/span')
-            # send_tweet.click()
+                                             '2]/div/div[3]/div/div/div/div[1]/div/div/div/div/div[2]/div['
+                                             '3]/div/div/div[2]/div[4]/div/span/span')
+
         else:
             print("Current speeds are good.")
-
-        # try:
-
-        # except:
-        #     pass
-        # password_field = self.driver.find_element(By.XPATH,
-        #                                           '//*[@id="layers"]/div[2]/div/div/div/div/div/div[2]/div['
-        #                                           '2]/div/div/div[2]/div[2]/div[1]/div/div[3]/div/label/div/div['
-        #                                           '2]/div/input')
-        # password_field.send_keys(PASSWORD)
-        # password_field.send_keys(Keys.RETURN)
 
     def wait_for_field(self, xpath):
         WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
