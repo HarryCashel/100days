@@ -20,7 +20,7 @@ class InternetSpeedTwitter:
     def __init__(self):
         self.service = Service("C:/Users/cashe/Desktop/chromedriver")
         self.driver = webdriver.Chrome(service=self.service)
-        self.down = 260
+        self.down = 275
         self.up = 20
         self.current_down = None
         self.current_up = None
@@ -47,7 +47,7 @@ class InternetSpeedTwitter:
             print("Couldn't fetch download or upload speed\n")
 
     def tweet(self):
-        message = f"Hey {SERVICE_PROVIDER}, why is my internet speed {self.current_down}download/{self.current_up}upload when I pay for 175down/25up? "
+        message = f"Hey {SERVICE_PROVIDER}, why is my internet speed {self.current_down}download/{self.current_up} upload when I pay for {self.down}down/{self.up}up? "
         if float(self.current_up) < self.up or float(self.current_down) < self.down:
             print("Speeds are slow. Contacting service provider.")
             self.driver.get("https://twitter.com/i/flow/login")
