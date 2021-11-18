@@ -53,4 +53,46 @@ class DataEntry:
 
         return house_data
 
-# print(rental_links)
+    def fill_form(self, listing):
+        url = GOOGLE_FORM_LINK
+        self.driver.get(url)
+        for listing in listing:
+            address_form = self.wait_for_field('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div['
+                                               '1]/div/div[1]/input')
+            price_form = self.wait_for_field('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div['
+                                             '1]/div/div[1]/input')
+            link_form = self.wait_for_field('//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div['
+                                            '1]/div/div[1]/input')
+
+            address_form.send_keys(listing["address"])
+            price_form.send_keys(listing["price"])
+            link_form.send_keys(listing["link"])
+            self.reset_form()
+        print("All listing uploaded to Google Form")
+        print("Exiting program.")
+        self.driver.close()
+
+    def reset_form(self):
+        submit = self.wait_for_field('//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div/span')
+        submit.click()
+        reset = self.wait_for_field('/html/body/div[1]/div[2]/div[1]/div/div[4]/a')
+        reset.click()
+
+    def wait_for_field(self, xpath):
+        WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
+
+        field = self.driver.find_element(By.XPATH, xpath)
+        return field
+
+    def scroll_down(self):
+        self.driver.get(ZILLOW_URL)
+        self.driver.fullscreen_window()
+        listings_card = self.wait_for_field('//*[@id="grid-search-results"]')
+        for i in range(2):
+            self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", listings_card)
+            time.sleep(1)
+
+test = DataEntry()
+listings = test.get_listings()
+test.fill_form(listings)
+# test.scroll_down()
