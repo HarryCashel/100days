@@ -58,7 +58,7 @@ class InstagramBot:
         link_to_followers.click()
 
     def spam_follow(self):
-
+        time.sleep(5)
         for account in self.accounts_to_follow:
             self.search(account)
             self.get_to_followers()
@@ -66,7 +66,7 @@ class InstagramBot:
             followers_list_xpath = '/html/body/div[6]/div/div/div[2]'
             followers_element = self.wait_for_field(followers_list_xpath)
 
-            for i in range(2):
+            for i in range(1):
                 self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", followers_element)
                 time.sleep(3)
 
@@ -75,9 +75,17 @@ class InstagramBot:
                 try:
                     button.click()
                     time.sleep(1)
-                except ElementClickInterceptedException:
+                except:
                     cancel_button = self.wait_for_field('/html/body/div[6]/div/div/div[1]/div/div[2]/button')
                     cancel_button.click()
+            try:
+                cancel_button = self.wait_for_field('/html/body/div[6]/div/div/div[1]/div/div[2]/button')
+                cancel_button.click()
+            except:
+                pass
+
+
+
 
     def wait_for_field(self, xpath):
         WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
