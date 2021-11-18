@@ -65,9 +65,9 @@ class InstagramBot:
         followers_list_xpath = '/html/body/div[6]/div/div/div[2]'
         followers_element = self.wait_for_field(followers_list_xpath)
 
-        for i in range(1):
+        for i in range(5):
             self.driver.execute_script("arguments[0].scrollTop = arguments[0].scrollHeight", followers_element)
-            time.sleep(3)
+            time.sleep(1)
 
         all_buttons = followers_element.find_elements(By.CSS_SELECTOR, 'li button')
         for button in all_buttons:
@@ -82,9 +82,6 @@ class InstagramBot:
             cancel_button.click()
         except:
             pass
-
-
-
 
     def wait_for_field(self, xpath):
         WebDriverWait(self.driver, 120).until(EC.presence_of_element_located((By.XPATH, xpath)))
