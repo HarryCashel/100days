@@ -6,9 +6,13 @@
 </head>
 <body>
 <h1>My Library</h1>
+    {% if book == [] %}
+        <p>Library is empty</p>
+    {% endif %}
     <ul>
         {% for book in books %}
-        <li>{{ book.title }} - {{ book.author }} - {{ book.rating }}</li>
+
+        <li>{{ book.title }} - {{ book.author }} - {{ book.rating }}/10</li>
     </ul>
     {% endfor %}
     
