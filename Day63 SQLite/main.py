@@ -25,28 +25,3 @@ book_2 = Book(id=2, title="Harry Potter 2", author="JK. Rowling", rating=9.5)
 db.session.add(book_1)
 db.session.add(book_2)
 db.session.commit()
-
-
-
-# import sqlite3
-#
-# # Create database file
-# db = sqlite3.connect("books-collection.db")
-#
-# # Create a cursor object
-# cursor = db.cursor()
-#
-# # Create a table called books with 4 fields
-# # cursor.execute(
-# #     "CREATE TABLE books (id INTEGER PRIMARY KEY, "
-# #     "title varchar(250) NOT NULL UNIQUE, "
-# #     "author varchar(250) NOT NULL, "
-# #     "rating FLOAT NOT NULL)"
-# # )
-#
-# # Add data to our database table books
-# cursor.execute(
-#     "INSERT INTO books VALUES("
-#     "2, 'Harry Potter 2', 'J.K. Rowling', 9.3)"
-# )
-# db.commit()

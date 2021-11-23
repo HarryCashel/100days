@@ -32,7 +32,7 @@ def create_book():
 
 create_book()
 # Read All Records
-all_books = db.session.query(Book).all
+all_books = db.session.query(Book).all()
 # Read a Particular Record By Query
 book = Book.query.filter_by(title="Harry Potter 1").first()
 

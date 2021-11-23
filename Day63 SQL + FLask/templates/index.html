@@ -12,7 +12,12 @@
     <ul>
         {% for book in books %}
 
-        <li>{{ book.title }} - {{ book.author }} - {{ book.rating }}/10</li>
+        <li>
+            <a href="{{ url_for('delete', book_id=book.id) }}">Delete Book</a>
+            {{ book.title }} - {{ book.author }} - {{ book.rating }}/10
+            <a href="{{ url_for('edit', book_id=book.id) }}">Edit Rating</a>
+        </li>
+
     </ul>
     {% endfor %}
     
