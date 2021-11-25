@@ -32,7 +32,6 @@ db.drop_all()
 # create database+table
 db.create_all()
 
-
 # drop database table
 
 
@@ -53,10 +52,28 @@ db.session.add(new_movie)
 db.session.commit()
 
 
+class EditMovie(FlaskForm):
+    new_rating = StringField("Your rating out of 10 e.g. 7.5")
+    new_review = StringField("Your Review")
+    submit = SubmitField("Done")
+
+
 @app.route("/")
 def home():
     all_movies = db.session.query(Movie).all()
     return render_template("index.html", movies=all_movies)
+
+
+@app.route("/edit<int:movie_id>", methods=["GET", "POST"])
+def edit(movie_id):
+    form = EditMovie()
+    movie_to_update = Movie.query.get(movie_id)
+    if form.validate_on_submit():
+        movie_to_update.rating = float(form.new_rating.data)
+        movie_to_update.review = form.new_review.data
+        db.session.commit()
+        return redirect(url_for('home'))
+    return render_template('edit.html', form=form, movie=movie_to_update)
 
 
 if __name__ == '__main__':

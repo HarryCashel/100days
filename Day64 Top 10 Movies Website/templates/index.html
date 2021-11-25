@@ -29,12 +29,12 @@
             <label>{{ movie.rating }}</label>
           <i class="fas fa-star star"></i>
         </div>
-          <p class="review">{{ movie.review }}</p>
+          <p class="review">"{{ movie.review }}"</p>
         <p class="overview">
             {{ movie.description }}
         </p>
 
-        <a href="#" class="btn btn-primary">Update</a>
+        <a href="{{ url_for('edit', movie_id=movie.id) }}" class="btn btn-primary">Update</a>
         <a href="#" class="btn btn-danger">Delete</a>
 
       </div>
