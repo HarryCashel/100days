@@ -3,8 +3,11 @@ from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
+import os
 from wtforms.validators import DataRequired
 import requests
+
+API_KEY = os.environ["API_KEY"]
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -74,6 +77,19 @@ def edit(movie_id):
         db.session.commit()
         return redirect(url_for('home'))
     return render_template('edit.html', form=form, movie=movie_to_update)
+
+
+@app.route("/delete<int:movie_id>")
+def delete(movie_id):
+    movie_to_delete = Movie.query.get(movie_id)
+    db.session.delete(movie_to_delete)
+    db.session.commit()
+    return redirect(url_for('home'))
+
+
+@app.route("/add")
+def add():
+    pass
 
 
 if __name__ == '__main__':
