@@ -55,10 +55,16 @@ db.session.add(new_movie)
 db.session.commit()
 
 
+# Forms
 class EditMovie(FlaskForm):
     new_rating = StringField("Your rating out of 10 e.g. 7.5")
     new_review = StringField("Your Review")
     submit = SubmitField("Done")
+
+
+class AddMovie(FlaskForm):
+    title = StringField("Movie Title")
+    submit = SubmitField("Add Movie")
 
 
 @app.route("/")
@@ -87,9 +93,13 @@ def delete(movie_id):
     return redirect(url_for('home'))
 
 
-@app.route("/add")
+@app.route("/add", methods=["GET", "POST"])
 def add():
-    pass
+    form = AddMovie()
+    if form.validate_on_submit():
+        pass
+        return redirect(url_for('select.html'))
+    return render_template('add.html', form=form)
 
 
 if __name__ == '__main__':
