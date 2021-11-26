@@ -3,9 +3,10 @@ from werkzeug import exceptions
 from flask import Flask, jsonify, render_template, request, json
 from flask_sqlalchemy import SQLAlchemy
 from random import choice, randint
+import secrets
 
 app = Flask(__name__)
-
+secret_secret = secrets.token_hex()
 ##Connect to Database
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///cafes.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -34,7 +35,7 @@ class Cafe(db.Model):
 @app.route("/")
 def home():
     return render_template("index.html")
-    
+
 
 ## HTTP GET - Read Record
 @app.route("/random")
@@ -47,6 +48,7 @@ def get_random_cafe():
     # random_offset = randint(0, row_count - 1)
     # random_cafe = Cafe.query.offset(random_offset).first()
     return jsonify(cafe=random_cafe.to_dict())
+
 
 @app.route("/all")
 def get_all_cafes():
@@ -62,7 +64,7 @@ def search_for_cafe():
         if len(searched_cafes) < 1:
             # print(searched_cafes)
             return jsonify(searched_cafes.to_dict())
-    # print(searched_cafes)
+        # print(searched_cafes)
         return jsonify([cafe.to_dict() for cafe in searched_cafes])
     return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
 
@@ -71,27 +73,66 @@ def search_for_cafe():
 
 @app.route("/add", methods=["POST"])
 def add_cafe():
+    try:
+        new_cafe = Cafe(
+            name=request.form.get("name"),
+            map_url=request.form.get("map_url"),
+            img_url=request.form.get("img_url"),
+            location=request.form.get("loc"),
+            has_sockets=bool(request.form.get("sockets")),
+            has_toilet=bool(request.form.get("toilet")),
+            has_wifi=bool(request.form.get("wifi")),
+            can_take_calls=bool(request.form.get("calls")),
+            seats=request.form.get("seats"),
+            coffee_price=request.form.get("coffee_price"),
+        )
+        db.session.add(new_cafe)
+        db.session.commit()
+        return jsonify(response={"Success": "Added the new cafe!"})
+    except sqlalchemy.exc.IntegrityError:
+        return jsonify(error={"Duplicate": "There is a cafe with that name already."}), 404
 
-    new_cafe = Cafe(
-        name=request.form.get("name"),
-        map_url=request.form.get("map_url"),
-        img_url=request.form.get("img_url"),
-        location=request.form.get("loc"),
-        has_sockets=bool(request.form.get("sockets")),
-        has_toilet=bool(request.form.get("toilet")),
-        has_wifi=bool(request.form.get("wifi")),
-        can_take_calls=bool(request.form.get("calls")),
-        seats=request.form.get("seats"),
-        coffee_price=request.form.get("coffee_price"),
-    )
-    db.session.add(new_cafe)
-    db.session.commit()
-    return jsonify(response={"Success": "Added the new cafe!"})
 
 ## HTTP PUT/PATCH - Update Record
 
+@app.route("/update-price/<int:coffee_id>", methods=["PATCH", "PUT", "POST"])
+def update_price(coffee_id):
+    try:
+        coffee_to_update = Cafe.query.get(coffee_id)
+        new_price = request.args.get("new-price")
+        coffee_to_update.coffee_price = new_price
+        db.session.commit()
+        return jsonify(response={"Success": "Successfully updated the price"}), 200
+    except AttributeError:
+        return jsonify(error={"Cafe not found": "Cannot update something that does not exist."}), 404
+
+
 ## HTTP DELETE - Delete Record
 
+
+@app.route("/delete/<int:cafe_id>", methods=["DELETE"])
+def delete_cafe(cafe_id):
+    auth = request.args.get("api-key")
+    if auth == secret_secret:
+        cafe_to_delete = Cafe.query.get(cafe_id)
+        if cafe_to_delete:
+
+            try:
+
+                db.session.delete(cafe_to_delete)
+                db.session.commit()
+                return jsonify(response={"Success": "Successfully deleted cafe"}), 200
+            # except AttributeError:
+            #     return jsonify(error={"Cafe not found": "Cannot delete something that does not exist."}), 404
+            except sqlalchemy.orm.exc.UnmappedInstanceError:
+                return jsonify(error={"error": "Cannot delete something that does not exist."}), 404
+        else:
+            return jsonify(error={"error": "Cannot delete something that does not exist."}), 404
+    else:
+        return jsonify(error={"error": "Sorry you don't have permission. Make sure you have the correct api_key."}), 403
+
+
+print(secret_secret)
 
 if __name__ == '__main__':
     app.run(debug=True)
