@@ -66,7 +66,7 @@ def search_for_cafe():
             return jsonify(searched_cafes.to_dict())
         # print(searched_cafes)
         return jsonify([cafe.to_dict() for cafe in searched_cafes])
-    return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."})
+    return jsonify(error={"Not Found": "Sorry, we don't have a cafe at that location."}), 404
 
 
 ## HTTP POST - Create Record
@@ -90,7 +90,7 @@ def add_cafe():
         db.session.commit()
         return jsonify(response={"Success": "Added the new cafe!"})
     except sqlalchemy.exc.IntegrityError:
-        return jsonify(error={"Duplicate": "There is a cafe with that name already."}), 404
+        return jsonify(error={"Duplicate": "There is a cafe with that name already."}), 409
 
 
 ## HTTP PUT/PATCH - Update Record
