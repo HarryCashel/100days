@@ -1,3 +1,4 @@
+import flask
 import werkzeug.security
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
@@ -8,13 +9,22 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterUserForm
+from forms import CreatePostForm, RegisterUserForm, LoginForm
 from flask_gravatar import Gravatar
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
 ckeditor = CKEditor(app)
 Bootstrap(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+
+# log in manager
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)
+
 
 ##CONNECT TO DB
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///blog.db'
@@ -35,7 +45,7 @@ class BlogPost(db.Model):
     img_url = db.Column(db.String(250), nullable=False)
 
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(30), nullable=False, unique=True)
@@ -68,22 +78,43 @@ def register():
             new_user.password = werkzeug.security.generate_password_hash(form.password.data)
             db.session.add(new_user)
             db.session.commit()
-        except IntegrityError as e:
-            flash("You have already signed up with that email or username. Log in instead")
-            return redirect(url_for('get_all_posts')), 302
-        return redirect(url_for('get_all_posts'))
 
-        # login user
+            login_user(new_user)
+            return redirect(url_for('get_all_posts'))
+
+        except IntegrityError:
+            flash("You have already signed up with that email or username. Log in instead")
+            return redirect(url_for('login')), 302
     return render_template("register.html", form=form)
 
 
-@app.route('/login')
+@app.route('/login', methods=["GET", "POST"])
 def login():
-    return render_template("login.html")
+    form = LoginForm()
+
+    if request.method == "POST" and form.validate_on_submit():
+        email = form.email.data
+        password = form.password.data
+
+        user = User.query.filter_by(email=email).first()
+        if not user:
+            flash("Invalid credentials. Please try again.")
+            return redirect(url_for('login'))
+        if user:
+            if werkzeug.security.check_password_hash(user.password, password):
+                login_user(user)
+                flash("Successfully logged in")
+                return redirect(url_for('get_all_posts'))
+            else:
+                flash("Invalid credentials. Please try again.")
+                return redirect(url_for('login', form=form))
+    return render_template("login.html", form=form)
 
 
 @app.route('/logout')
+@login_required
 def logout():
+    logout_user()
     return redirect(url_for('get_all_posts'))
 
 
