@@ -1,4 +1,5 @@
-from flask import Flask, render_template, redirect, url_for, flash
+import werkzeug.security
+from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
 from datetime import date
@@ -6,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm
+from forms import CreatePostForm, RegisterUserForm
 from flask_gravatar import Gravatar
 
 app = Flask(__name__)
@@ -31,6 +32,16 @@ class BlogPost(db.Model):
     date = db.Column(db.String(250), nullable=False)
     body = db.Column(db.Text, nullable=False)
     img_url = db.Column(db.String(250), nullable=False)
+
+
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(30), nullable=False, unique=True)
+    email = db.Column(db.String(30), nullable=False, unique=True)
+    password = db.Column(db.String(1000), nullable=False)
+
+db.drop_all()
 db.create_all()
 
 
@@ -40,8 +51,26 @@ def get_all_posts():
     return render_template("index.html", all_posts=posts)
 
 
-@app.route('/register')
+@app.route('/register', methods=["GET", "POST"])
 def register():
+    form = RegisterUserForm()
+    # check method and if form is valid and submitted
+    if request.method == "POST" and form.validate_on_submit():
+        # Check if user already in database, if so redirect to log in page
+        user_exist = User.query.filter_by(username=form.username.data)
+        if user_exist:
+            flash("You have already signed up with that email. Log in instead")
+            redirect(url_for('login')), 302
+        # Create a new user in database and log them in. Redirect to home
+        else:
+            new_user = User()
+            new_user.username = form.username.data
+            new_user.email = form.email.data
+            new_user.password = werkzeug.security.generate_password_hash(form.password.data)
+            db.session.add(new_user)
+            db.session.commit()
+
+            # login user
     return render_template("register.html")
 
 
