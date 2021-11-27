@@ -6,6 +6,7 @@ from datetime import date
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
+from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from forms import CreatePostForm, RegisterUserForm
 from flask_gravatar import Gravatar
@@ -41,8 +42,9 @@ class User(db.Model):
     email = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(1000), nullable=False)
 
-db.drop_all()
-db.create_all()
+
+# db.drop_all()
+# db.create_all()
 
 
 @app.route('/')
@@ -57,21 +59,22 @@ def register():
     # check method and if form is valid and submitted
     if request.method == "POST" and form.validate_on_submit():
         # Check if user already in database, if so redirect to log in page
-        user_exist = User.query.filter_by(username=form.username.data)
-        if user_exist:
-            flash("You have already signed up with that email. Log in instead")
-            redirect(url_for('login')), 302
-        # Create a new user in database and log them in. Redirect to home
-        else:
+        user_exist = User.query.filter_by(email=form.email.data)
+        try:
+            # Create a new user in database and log them in. Redirect to home
             new_user = User()
             new_user.username = form.username.data
             new_user.email = form.email.data
             new_user.password = werkzeug.security.generate_password_hash(form.password.data)
             db.session.add(new_user)
             db.session.commit()
+        except IntegrityError as e:
+            flash("You have already signed up with that email or username. Log in instead")
+            return redirect(url_for('get_all_posts')), 302
+        return redirect(url_for('get_all_posts'))
 
-            # login user
-    return render_template("register.html")
+        # login user
+    return render_template("register.html", form=form)
 
 
 @app.route('/login')
