@@ -29,7 +29,7 @@ while game_on:
     score.update_scoreboard()
     screen.update()
 
-    if score.left_score or score.right_score > 1:
+    if score.left_score > 3 or score.right_score > 3:
         game_on = False
         ball.hideturtle()
         score.game_over()

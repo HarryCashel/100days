@@ -22,4 +22,4 @@ class Ball(Turtle):
 
     def move_forward(self):
         """Moves the ball"""
-        self.forward(20)
+        self.forward(30)
