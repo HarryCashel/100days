@@ -1,19 +1,17 @@
-import flask
+from datetime import date
+from functools import wraps
+
 import werkzeug.security
 from flask import Flask, render_template, redirect, url_for, flash, request
+from flask import abort
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy.orm import relationship
-from sqlalchemy.exc import IntegrityError
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-from forms import CreatePostForm, RegisterUserForm, LoginForm
-from flask_gravatar import Gravatar
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import relationship
 
-from functools import wraps
-from flask import abort
+from forms import CreatePostForm, RegisterUserForm, LoginForm
 
 
 # Create admin-only decorator
@@ -55,6 +53,7 @@ class BlogPost(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.String(250), nullable=False)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
@@ -65,10 +64,11 @@ class BlogPost(db.Model):
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
+
     username = db.Column(db.String(30), nullable=False, unique=True)
     email = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(1000), nullable=False)
-
+    posts = db.relationship("BlogPost", backref="user", lazy="dynamic")
 
 db.drop_all()
 db.create_all()
@@ -158,6 +158,7 @@ def add_new_post():
     if form.validate_on_submit():
         new_post = BlogPost(
             title=form.title.data,
+            author_id=str(current_user.id),
             subtitle=form.subtitle.data,
             body=form.body.data,
             img_url=form.img_url.data,
