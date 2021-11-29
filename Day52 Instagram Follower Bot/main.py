@@ -10,8 +10,8 @@ import os
 
 # Constants
 
-EMAIL = os.environ["EMAIL"]
-PASSWORD = os.environ["PASSWORD"]
+EMAIL = "cashel.harry101@gmail.com"
+PASSWORD = "%?uQ3p6YU/ab_Mt"
 CHROME_DRIVER_PATH = "C:/Users/cashe/Desktop/chromedriver"
 INSTA_URL = "https://www.instagram.com/"
 SCROLL_PAUSE = .5
