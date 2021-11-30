@@ -9,9 +9,8 @@ from flask_ckeditor import CKEditor
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import relationship
 
-from forms import CreatePostForm, RegisterUserForm, LoginForm
+from forms import CreatePostForm, RegisterUserForm, LoginForm, CommentForm
 
 
 # Create admin-only decorator
@@ -52,8 +51,10 @@ db = SQLAlchemy(app)
 class BlogPost(db.Model):
     __tablename__ = "blog_posts"
     id = db.Column(db.Integer, primary_key=True)
-    author = db.Column(db.String(250), nullable=False)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    author = db.relationship("User", back_populates="posts")
+    comments = db.relationship("Comment", back_populates="parent_blog")
+
     title = db.Column(db.String(250), unique=True, nullable=False)
     subtitle = db.Column(db.String(250), nullable=False)
     date = db.Column(db.String(250), nullable=False)
@@ -68,9 +69,22 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(30), nullable=False, unique=True)
     email = db.Column(db.String(30), nullable=False, unique=True)
     password = db.Column(db.String(1000), nullable=False)
-    posts = db.relationship("BlogPost", backref="user", lazy="dynamic")
+    posts = db.relationship("BlogPost", back_populates="author")
+    comments = db.relationship("Comment", back_populates="comment_author")
 
-db.drop_all()
+
+class Comment(db.Model):
+    __tablename__ = "comments"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    blog_id = db.Column(db.Integer, db.ForeignKey("blog_posts.id"), nullable=False)
+
+    content = db.Column(db.Text, nullable=False)
+    comment_author = db.relationship("User", back_populates="comments")
+    parent_blog = db.relationship("BlogPost", back_populates="comments")
+
+
+# db.drop_all()
 db.create_all()
 
 
@@ -135,10 +149,26 @@ def logout():
     return redirect(url_for('get_all_posts'))
 
 
-@app.route("/post/<int:post_id>")
+@app.route("/post/<int:post_id>", methods=["GET", "POST"])
+@login_required
 def show_post(post_id):
+    form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
-    return render_template("post.html", post=requested_post)
+    print(requested_post)
+    if request.method == "POST" and form.validate_on_submit():
+        if not current_user.is_authenticated:
+            flash("You need to be signed in to comment")
+            return redirect(url_for('login'))
+
+        new_comment = Comment(
+            content=form.comment.data,
+            comment_author=current_user,
+            parent_blog=requested_post
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+
+    return render_template("post.html", post=requested_post, form=form)
 
 
 @app.route("/about")
@@ -162,7 +192,7 @@ def add_new_post():
             subtitle=form.subtitle.data,
             body=form.body.data,
             img_url=form.img_url.data,
-            author=str(current_user),
+            # author=str(current_user),
             date=date.today().strftime("%B %d, %Y")
         )
         db.session.add(new_post)

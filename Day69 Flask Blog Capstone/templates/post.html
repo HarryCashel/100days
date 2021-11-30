@@ -1,4 +1,5 @@
 {% include "header.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 
   <!-- Page Header -->
   <header class="masthead" style="background-image: url('{{post.img_url}}')">
@@ -10,7 +11,7 @@
             <h1>{{post.title}}</h1>
             <h2 class="subheading">{{post.subtitle}}</h2>
             <span class="meta">Posted by
-              <a href="#">{{post.author}}</a>
+              <a href="#">{{post.author.username}}</a>
               on {{post.date}}</span>
           </div>
         </div>
@@ -26,15 +27,21 @@
             {{ post.body|safe }}
           <hr>
 
+          {% if current_user.username == post.author.username or current_user.id == 1%}
             <div class="clearfix">
             <a class="btn btn-primary float-right" href="{{url_for('edit_post', post_id=post.id)}}">Edit Post</a>
             </div>
-
+          {% endif %}
 
 
 <!--           Comments Area -->
+          {{ ckeditor.load() }}
+          {{ ckeditor.config(name='comment') }}
+          {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"}) }}
+
           <div class="col-lg-8 col-md-10 mx-auto comment">
               <ul class="commentList">
+
                 <li>
                     <div class="commenterImage">
                       <img src="https://pbs.twimg.com/profile_images/744849215675838464/IH0FNIXk.jpg"/>
