@@ -9,8 +9,22 @@ from flask_ckeditor import CKEditor
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
-
+from flask_gravatar import Gravatar
 from forms import CreatePostForm, RegisterUserForm, LoginForm, CommentForm
+
+app = Flask(__name__)
+app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+ckeditor = CKEditor(app)
+Bootstrap(app)
+login_manager = LoginManager()
+login_manager.init_app(app)
+gravatar = Gravatar(app, size=100, rating='g', default='retro', force_default=False, force_lower=False, use_ssl=False, base_url=None)
+
+
+# log in manager
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 
 # Create admin-only decorator
@@ -24,20 +38,6 @@ def admin_only(f):
         return f(*args, **kwargs)
 
     return decorated_function
-
-
-app = Flask(__name__)
-app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
-ckeditor = CKEditor(app)
-Bootstrap(app)
-login_manager = LoginManager()
-login_manager.init_app(app)
-
-
-# log in manager
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(user_id)
 
 
 ##CONNECT TO DB
@@ -71,6 +71,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(1000), nullable=False)
     posts = db.relationship("BlogPost", back_populates="author")
     comments = db.relationship("Comment", back_populates="comment_author")
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}')"
 
 
 class Comment(db.Model):
@@ -150,11 +153,9 @@ def logout():
 
 
 @app.route("/post/<int:post_id>", methods=["GET", "POST"])
-@login_required
 def show_post(post_id):
     form = CommentForm()
     requested_post = BlogPost.query.get(post_id)
-    print(requested_post)
     if request.method == "POST" and form.validate_on_submit():
         if not current_user.is_authenticated:
             flash("You need to be signed in to comment")
@@ -168,7 +169,7 @@ def show_post(post_id):
         db.session.add(new_comment)
         db.session.commit()
 
-    return render_template("post.html", post=requested_post, form=form)
+    return render_template("post.html", post=requested_post, form=form, current_user=current_user)
 
 
 @app.route("/about")
