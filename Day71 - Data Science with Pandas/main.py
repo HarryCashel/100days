@@ -1,7 +1,13 @@
 import pandas as pd
+import requests
+from bs4 import BeautifulSoup
 import pprint
 
 df = pd.read_csv('salaries_by_college_major.csv')
+
+pd.set_option('display.width', 7)
+
+pd.set_option('display.max_columns', 10)
 
 # pprint.pprint(df.head())
 
@@ -89,8 +95,10 @@ print(ls_top_5)
 print(clean_data.groupby("Group").count())
 
 # find the average salary of each group
-
+pd.options.display.float_format = '{:,.2f}'.format
 print(clean_data.groupby("Group").mean())
+
+
 
 
 
