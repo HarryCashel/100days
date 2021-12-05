@@ -12,6 +12,10 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+"""This program uses a WebDriver to accept and send commands to a browser. The specific purpose is to scrape
+data from a real estate website for one-bedroom listings in a specific location. I use the requests library to
+make a request to the url. BeautifulSoup is used to scrape the website for data which is stored in a dictionary.
+Selenium WebDriver is used to populate a Google Sheet with the data in a human readable format."""
 
 GOOGLE_FORM_LINK = "https://docs.google.com/forms/d/e/1FAIpQLSc-0shJnO4A6gmSDOAKuAL3RAH8DG3xX-ikVuTjqswX9OD3rg" \
                    "/viewform?usp=sf_link "
@@ -29,7 +33,7 @@ CHROME_DRIVER_PATH = "C:/Users/cashe/Desktop/chromedriver"
 
 class DataEntry:
     def __init__(self):
-        self.header = browser_headings = {
+        self.header = {
             "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                           "Chrome/95.0.4638.69 Safari/537.36 "
